@@ -6,7 +6,6 @@
     "lint:api": "cd api && npm run lint",
     "dev": "concurrently --kill-others \"npm run dev:client\" \"npm run dev:api\"",
     "precommit": "concurrently --kill-others \"npm run lint:client\" \"npm run lint:api\"",
-    "commit": "git commit",
-    "push": "cd api && bun compile && git push -u --all"
+    "commit": "git commit"
   }
 }

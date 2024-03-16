@@ -1,11 +1,22 @@
-*::-webkit-scrollbar {
-  background: white;
-  width: 8px;
+@layer tailwind-base, primereact, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
 }
-*::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
 }
-*::-webkit-scrollbar-thumb:hover {
-  background: #555;
+
+@layer base {
+  body {
+    @apply min-h-screen p-4 bg-gradient-to-tr from-blue-100 to-green-100;
+  }
+  *::-webkit-scrollbar {
+    @apply bg-white w-2;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply bg-navy rounded;
+  }
 }
