@@ -20,6 +20,9 @@ export default {
   theme: {
     extend: {
       colors: myColors,
+      screens: {
+        xs: { min: "540px" },
+      },
     },
     plugins: [],
   },

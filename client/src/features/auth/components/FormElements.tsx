@@ -1,23 +1,13 @@
-/* eslint-disable no-useless-escape */
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Checkbox } from "primereact/checkbox";
-import { FormType } from "./FormProvider";
-import { LoginValues, RegistrationValues } from "../types/creds";
+import { useForm } from "react-hook-form";
+import { LoginValues } from "../types/creds";
 
-type FormElementsType = {
-  errors: FormType<RegistrationValues>["errors"];
-  register: FormType<RegistrationValues>["register"];
-};
-
-type FormElementsWithPasswordType = {
-  errors:
-    | FormType<LoginValues>["errors"]
-    | FormType<RegistrationValues>["errors"];
+type FieldType = {
+  errors: ReturnType<typeof useForm<LoginValues>>["formState"]["errors"];
+  register: ReturnType<typeof useForm<LoginValues>>["register"];
   forgotPassword?: boolean;
-  register:
-    | FormType<LoginValues>["register"]
-    | FormType<RegistrationValues>["register"];
 };
 
 export const HelperSmallText = ({
@@ -25,7 +15,7 @@ export const HelperSmallText = ({
   err,
 }: {
   message: React.ReactNode;
-  err: FormElementsType["errors"][keyof FormElementsType["errors"]] | undefined;
+  err: boolean;
 }) => {
   if (err) {
     return (
@@ -44,34 +34,13 @@ export const HelperSmallText = ({
   );
 };
 
-export const UserNameField = ({ errors, register }: FormElementsType) => (
-  <span>
-    <label htmlFor="username">Your Name</label>
-    <InputText
-      id="username"
-      type="text"
-      keyfilter={/^[a-z\. ]+$/i}
-      className="p-inputtext-sm"
-      {...register("username", {
-        required: true,
-        minLength: { value: 6, message: "" },
-      })}
-    />
-    <HelperSmallText
-      message="Atleast 6 alphanumeric characters"
-      err={errors?.username}
-    />
-  </span>
-);
-
-export const EmailField = ({ errors, register }: FormElementsType) => (
+export const EmailField = ({ errors, register }: FieldType) => (
   <span>
     <label htmlFor="email">Email</label>
     <InputText
       id="email"
       type="email"
       keyfilter="email"
-      className="p-inputtext-sm"
       {...register("email", {
         required: true,
         pattern: {
@@ -80,7 +49,10 @@ export const EmailField = ({ errors, register }: FormElementsType) => (
         },
       })}
     />
-    <HelperSmallText message="Enter valid email address" err={errors?.email} />
+    <HelperSmallText
+      message="Enter valid email address"
+      err={Boolean(errors?.email)}
+    />
   </span>
 );
 
@@ -88,7 +60,7 @@ export const PasswordField = ({
   errors,
   register,
   forgotPassword,
-}: FormElementsWithPasswordType) => {
+}: FieldType) => {
   const { ref, ...rest } = register("password", {
     required: true,
     disabled: forgotPassword,
@@ -116,39 +88,11 @@ export const PasswordField = ({
       </span>
       <HelperSmallText
         message="Alteast 8 characters. Use letters, numbers & symbols"
-        err={errors?.password}
+        err={Boolean(errors?.password)}
       />
     </span>
   );
 };
-
-export const UniqueIdOREmailField = ({
-  errors,
-  register,
-  forgotPassword,
-}: FormElementsWithPasswordType) => (
-  <span>
-    <label htmlFor="usercreds" className="[&_u]:text-yellow-500">
-      Enter your unique <b>userId</b> or registered <b>email</b>
-    </label>
-    <InputText
-      id="usercreds"
-      type="text"
-      className="p-inputtext-sm"
-      {...register("usercreds", {
-        required: true,
-      })}
-    />
-    <HelperSmallText
-      message={
-        forgotPassword
-          ? "Your email will receive a reset link"
-          : "This was assigned to you by us. Remember ?"
-      }
-      err={errors?.usercreds}
-    />
-  </span>
-);
 
 export const ForgotPasswordCheckbox = ({
   forgotPassword,
@@ -157,7 +101,7 @@ export const ForgotPasswordCheckbox = ({
   forgotPassword: boolean;
   setForgotPassword: React.Dispatch<React.SetStateAction<boolean>>;
 }) => (
-  <span className="flex gap-2 items-center">
+  <span className="flex w-full gap-2 py-4 items-center justify-end">
     <Checkbox
       inputId="forgotPassword"
       className="scale-110"

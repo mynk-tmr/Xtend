@@ -1,26 +1,22 @@
-import { FormProvider } from "../components/FormProvider";
-import { LayoutAuth } from "../components/LayoutAuth";
-import RegistrationForm from "../components/RegistrationForm";
-import LoginForm from "../components/LoginForm";
+import { LoginForm } from "../components/LoginForm";
+import { Outlet } from "react-router-dom";
 
 export const authRoutes = {
   path: "/auth",
-  Component: FormProvider,
+  element: (
+    <section className="grid place-items-center p-5">
+      <Outlet />
+    </section>
+  ),
   children: [
     {
       path: "register",
-      element: (
-        <LayoutAuth
-          heading="Register your account"
-          form={<RegistrationForm />}
-        />
-      ),
+      element: <></>,
     },
     {
       path: "login",
-      element: (
-        <LayoutAuth heading="Login to your account" form={<LoginForm />} />
-      ),
+      element: <LoginForm />,
+      index: true,
     },
   ],
 };

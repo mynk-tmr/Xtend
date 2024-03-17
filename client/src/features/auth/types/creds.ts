@@ -1,16 +1,9 @@
-export type AuthType = {
-  email?: string;
-  password: string;
-  uniqueID?: string;
-};
-
-export type RegistrationValues = {
-  password: string;
-  email: string;
-  username: string;
+export type UserInfoType = {
+  fullname: string;
+  avatar: string;
 };
 
 export type LoginValues = {
-  usercreds: string;
+  email: string;
   password: string;
 };
