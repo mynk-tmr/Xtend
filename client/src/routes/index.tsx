@@ -1,9 +1,9 @@
-//import { authRoutes } from "@/features/auth";
+import { authRoutes } from "@/features/auth";
 import { homepageRoutes } from "@/features/home";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const Router = () => {
-  const router = createBrowserRouter([/* authRoutes, */ homepageRoutes]);
+  const router = createBrowserRouter([authRoutes, homepageRoutes]);
   return <RouterProvider router={router} />;
 };
 
