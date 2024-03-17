@@ -25,4 +25,10 @@ export const api = {
       json: {},
     });
   },
+
+  update: async (data: FormData, userId: string) => {
+    return await ky2.put(`update/${userId}`, {
+      body: data,
+    });
+  },
 };

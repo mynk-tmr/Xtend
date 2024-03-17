@@ -8,6 +8,7 @@ type FieldType = {
   errors: ReturnType<typeof useForm<LoginValues>>["formState"]["errors"];
   register: ReturnType<typeof useForm<LoginValues>>["register"];
   forgotPassword?: boolean;
+  required?: boolean;
 };
 
 export const HelperSmallText = ({
@@ -34,7 +35,7 @@ export const HelperSmallText = ({
   );
 };
 
-export const EmailField = ({ errors, register }: FieldType) => (
+export const EmailField = ({ errors, register, required }: FieldType) => (
   <span>
     <label htmlFor="email">Email</label>
     <InputText
@@ -42,11 +43,7 @@ export const EmailField = ({ errors, register }: FieldType) => (
       type="email"
       keyfilter="email"
       {...register("email", {
-        required: true,
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          message: "",
-        },
+        required: required ?? true,
       })}
     />
     <HelperSmallText
@@ -60,9 +57,10 @@ export const PasswordField = ({
   errors,
   register,
   forgotPassword,
+  required,
 }: FieldType) => {
   const { ref, ...rest } = register("password", {
-    required: true,
+    required: required ?? true,
     disabled: forgotPassword,
     minLength: { value: 8, message: "" },
   });
@@ -111,5 +109,23 @@ export const ForgotPasswordCheckbox = ({
     <label htmlFor="forgotPassword" className="cursor-pointer py-1">
       Forgot My Password
     </label>
+  </span>
+);
+
+export const Fullname = ({ errors, register, required }: FieldType) => (
+  <span>
+    <label htmlFor="fullname">Full Name</label>
+    <InputText
+      id="fullname"
+      type="fullname"
+      keyfilter="alpha"
+      {...register("fullname", {
+        required: required ?? true,
+      })}
+    />
+    <HelperSmallText
+      message="As given in any of your ID proof"
+      err={Boolean(errors?.fullname)}
+    />
   </span>
 );

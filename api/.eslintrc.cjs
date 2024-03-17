@@ -11,7 +11,6 @@ module.exports = {
     node: true,
   },
   rules: {
-    "no-console": "error",
     "no-unused-vars": ["error", { argsIgnorePattern: "next" }],
     "no-useless-escape": "off",
     "prefer-const": "error",

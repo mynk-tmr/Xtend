@@ -1,17 +1,22 @@
 import { LoginForm } from "../components/LoginForm";
 import { Outlet } from "react-router-dom";
+import { UpdateProfile } from "../components/UpdateProfile";
+import { SkewedBackground } from "../components/Decorations";
 
 export const authRoutes = {
   path: "/auth",
   element: (
     <section className="grid place-items-center p-5">
-      <Outlet />
+      <section className="relative max-w-prose">
+        <SkewedBackground />
+        <Outlet />
+      </section>
     </section>
   ),
   children: [
     {
-      path: "register",
-      element: <></>,
+      path: "update",
+      element: <UpdateProfile />,
     },
     {
       path: "login",
