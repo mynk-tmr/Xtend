@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
   createRoutesFromChildren,
 } from "react-router-dom";
-import { ListingPage } from "@/features/listing";
+import { Dashboard, MyListings } from "@/features/dashboard";
 import { AuthPage } from "@/features/auth";
 import { HomePage } from "@/features/home";
 import { PageNotFound } from "./404";
@@ -29,7 +29,9 @@ const Router = () => {
         </Route>
         <Route path="*" element={<PageNotFound />} />
         <Route element={<AuthRequired />}>
-          <Route path="/listing/*" element={<ListingPage />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<MyListings />} />
+          </Route>
         </Route>
       </Route>
     )

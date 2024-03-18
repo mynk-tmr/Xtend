@@ -25,7 +25,7 @@ export const EditProfileForm = (props: EditProfileFormType) => {
   const toast = useToast();
   const { verifyUser, user } = useAppContext();
 
-  const { mutate: onSubmit } = useMutation({
+  const { mutate: onSubmit, status } = useMutation({
     mutationFn: async () => {
       if (formRef.current) {
         await api.update(new FormData(formRef.current));
@@ -67,7 +67,15 @@ export const EditProfileForm = (props: EditProfileFormType) => {
       <EmailField
         {...{ errors, register, required: false, defaultValue: user?.email }}
       />
-      <Button label="Update" icon="pi pi-check" className="w-full !block" />
+      <Button disabled={status === "pending"} className="w-full !block">
+        {status === "pending" ? (
+          <i className="pi pi-spin pi-spinner" />
+        ) : (
+          <span>
+            <i className="pi pi-check"></i> Update Profile
+          </span>
+        )}
+      </Button>
     </form>
   );
 };

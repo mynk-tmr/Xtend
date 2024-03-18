@@ -3,7 +3,7 @@ import { RefObject, useState, useRef } from "react";
 import { Card } from "primereact/card";
 import { Avatar } from "primereact/avatar";
 import { EditProfileForm } from "./EditProfileForm";
-import { UserType } from "@/common/types/userType";
+import { User } from "@/common/types/user";
 import { isoToLocale } from "@/lib/intl";
 
 type HeaderType = {
@@ -40,7 +40,7 @@ const Header = (props: HeaderType) => {
   );
 };
 
-export const Profile = ({ user }: { user: UserType }) => {
+export const Profile = ({ user }: { user: User }) => {
   const [editEnabled, setEditEnabled] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(user.avatar || "");
   const uploadFileInputRef = useRef<HTMLInputElement>(null);

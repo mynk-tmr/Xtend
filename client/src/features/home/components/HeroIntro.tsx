@@ -1,9 +1,8 @@
 import { Button } from "primereact/button";
 import { Fieldset } from "primereact/fieldset";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const HeroIntro = () => {
-  const goto = useNavigate();
   return (
     <article className="grid gap-y-12">
       <h1 className="text-4xl font-bold">
@@ -24,20 +23,22 @@ export const HeroIntro = () => {
           </span>
         }>
         <div className="flex flex-wrap gap-2">
-          <Button
-            size="small"
-            label="I want to list my storage"
-            className="bg-grass text-base hover:opacity-90"
-            icon="pi pi-home"
-            onClick={() => goto("/listing/create")}
-          />
-          <Button
-            size="small"
-            label="I want to rent storage"
-            className="bg-navy text-base hover:opacity-90"
-            icon="pi pi-shopping-cart"
-            onClick={() => goto("/search")}
-          />
+          <Link to="/dashboard/addlisting">
+            <Button
+              size="small"
+              label="I want to list my storage"
+              className="bg-grass text-base hover:opacity-90"
+              icon="pi pi-home"
+            />
+          </Link>
+          <Link to="/search">
+            <Button
+              size="small"
+              label="I want to rent storage"
+              className="bg-navy text-base hover:opacity-90"
+              icon="pi pi-shopping-cart"
+            />
+          </Link>
         </div>
       </Fieldset>
     </article>
