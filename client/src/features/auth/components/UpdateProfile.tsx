@@ -2,7 +2,7 @@ import { Card } from "primereact/card";
 import { api } from "../services/api";
 import { Avatar } from "primereact/avatar";
 import { RefObject, useRef } from "react";
-import { EmailField, Fullname, PasswordField } from "./FormElements";
+import { EmailField, Fullname } from "./FormElements";
 import { useForm } from "react-hook-form";
 import { LoginValues } from "../types/creds";
 import { useState } from "react";
@@ -131,7 +131,6 @@ const EditInfoForm = ({
       />
       <Fullname {...{ errors, register, required: false }} />
       <EmailField {...{ errors, register, required: false }} />
-      <PasswordField {...{ errors, register, required: false }} />
       <Button label="Update" icon="pi pi-check" className="w-full !block" />
     </form>
   );

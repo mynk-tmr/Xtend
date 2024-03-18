@@ -1,17 +1,12 @@
-import ky from "ky";
 import { LoginValues } from "../types/creds";
+import { apiclient } from "@/lib/apiclient";
 
-const BASEURL = import.meta.env.VITE_SERVER_URL ?? "";
-
-const ky2 = ky.create({
-  prefixUrl: `${BASEURL}/api/auth`,
-  credentials: "include", // send & receive cookies
-});
+const prefix = "auth/";
 
 export const api = {
   login: async ({ email, password }: LoginValues) => {
-    return await ky2
-      .post("login", {
+    return await apiclient
+      .post(prefix + "login", {
         json: {
           email,
           password,
@@ -21,13 +16,13 @@ export const api = {
   },
 
   logout: async () => {
-    return await ky2.post("logout", {
+    return await apiclient.post(prefix + "logout", {
       json: {},
     });
   },
 
   update: async (data: FormData, userId: string) => {
-    return await ky2.put(`update/${userId}`, {
+    return await apiclient.put(prefix + `update/${userId}`, {
       body: data,
     });
   },

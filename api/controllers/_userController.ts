@@ -53,3 +53,8 @@ export async function updateUser(req: Request, res: Response) {
     res.sendStatus(500);
   }
 }
+
+export async function validateToken(req: Request, res: Response) {
+  const user = await User.findById(req.userId).select("-password");
+  res.status(200).send(user);
+}
