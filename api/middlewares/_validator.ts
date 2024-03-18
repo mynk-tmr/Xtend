@@ -10,3 +10,10 @@ export const validateLogin = [
   body("email", "invalid email").isEmail(),
   body("password", "invalid password").isLength({ min: 8 }),
 ];
+
+export const validateUpdate = [
+  body("email", "invalid email").optional().isEmail(),
+  body("fullname", "invalid fullname")
+    .optional()
+    .matches(/^[a-zA-Z\s]*$/i),
+];

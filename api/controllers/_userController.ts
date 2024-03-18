@@ -41,10 +41,11 @@ export async function logoutUser(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    for (const key in req.body) if (!req.body[key]) delete req.body[key];
+    const user = await User.findByIdAndUpdate(req.userId, req.body, {
       new: true,
     });
-    if (req.file)
+    if (req.file && req.file.mimetype.startsWith("image/"))
       user.avatar = (await uploadFiles([req.file] as Express.Multer.File[]))[0];
     await user.save();
     res.status(200).send(user);

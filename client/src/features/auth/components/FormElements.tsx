@@ -9,6 +9,7 @@ type FieldType = {
   register: ReturnType<typeof useForm<LoginValues>>["register"];
   forgotPassword?: boolean;
   required?: boolean;
+  defaultValue?: string;
 };
 
 export const HelperSmallText = ({
@@ -35,12 +36,18 @@ export const HelperSmallText = ({
   );
 };
 
-export const EmailField = ({ errors, register, required }: FieldType) => (
+export const EmailField = ({
+  errors,
+  register,
+  required,
+  defaultValue,
+}: FieldType) => (
   <span>
     <label htmlFor="email">Email</label>
     <InputText
       id="email"
       type="email"
+      placeholder={defaultValue}
       keyfilter="email"
       {...register("email", {
         required: required ?? true,
@@ -112,13 +119,19 @@ export const ForgotPasswordCheckbox = ({
   </span>
 );
 
-export const Fullname = ({ errors, register, required }: FieldType) => (
+export const Fullname = ({
+  errors,
+  register,
+  required,
+  defaultValue,
+}: FieldType) => (
   <span>
     <label htmlFor="fullname">Full Name</label>
     <InputText
       id="fullname"
       type="fullname"
-      keyfilter="alpha"
+      placeholder={defaultValue}
+      keyfilter={/^[a-zA-Z\s]*$/i}
       {...register("fullname", {
         required: required ?? true,
       })}

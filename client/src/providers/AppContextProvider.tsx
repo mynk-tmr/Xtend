@@ -2,17 +2,11 @@
 import { createContext, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiclient } from "@/lib/apiclient";
+import { UserType } from "@/common/types/userType";
 
 type AppContextType = {
-  isLoggedIn: boolean;
   isVerifying: boolean;
-  user: {
-    email: string;
-    password: string;
-    fullname: string;
-    avatar: string;
-    joined: Date;
-  } | null;
+  user: UserType | null;
   verifyUser: () => void;
 };
 
@@ -24,7 +18,7 @@ export const AppContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { isSuccess, isLoading, isFetching, data, refetch } = useQuery({
+  const { isLoading, isFetching, data, refetch } = useQuery({
     queryKey: ["user"],
     queryFn: async (): Promise<AppContextType["user"]> => {
       try {
@@ -35,10 +29,10 @@ export const AppContextProvider = ({
     },
     retry: false,
   });
+
   return (
     <AppContext.Provider
       value={{
-        isLoggedIn: isSuccess,
         isVerifying: isLoading || isFetching,
         user: data ?? null,
         verifyUser: refetch,

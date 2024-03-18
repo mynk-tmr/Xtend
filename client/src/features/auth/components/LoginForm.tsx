@@ -3,7 +3,7 @@ import logoUrl from "@/common/assets/logo.png";
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";
 import { LoginValues } from "../types/creds";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   EmailField,
   ForgotPasswordCheckbox,
@@ -12,7 +12,7 @@ import {
 import { api } from "../services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useAppContext } from "@/providers/AppContextProvider";
-import { Toast } from "primereact/toast";
+import { useToast } from "@/providers/ToastProvider";
 
 export const LoginForm = () => {
   const {
@@ -23,17 +23,12 @@ export const LoginForm = () => {
 
   const [forgotPassword, setForgotPassword] = useState(false);
   const { verifyUser } = useAppContext();
-  const toast = useRef<Toast>(null);
+  const toast = useToast();
 
   const { mutate, status } = useMutation({
     mutationFn: api.login,
     onSuccess: verifyUser,
-    onError: () =>
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Invalid email or password",
-      }),
+    onError: () => toast.error("Incorrect email or password"),
   });
 
   return (
@@ -56,7 +51,6 @@ export const LoginForm = () => {
           className: "relative bg-white shadow-lg xs:px-10 xs:py-5",
         },
       }}>
-      <Toast ref={toast} />
       <form onSubmit={handleSubmit((data) => mutate(data))} noValidate>
         <fieldset
           disabled={status === "pending"}

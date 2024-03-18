@@ -21,8 +21,8 @@ export const api = {
     });
   },
 
-  update: async (data: FormData, userId: string) => {
-    return await apiclient.put(prefix + `update/${userId}`, {
+  update: async (data: FormData) => {
+    return await apiclient.put(prefix + "update", {
       body: data,
     });
   },
