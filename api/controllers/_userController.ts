@@ -35,7 +35,7 @@ export async function loginUser(req: Request, res: Response) {
 }
 
 export async function logoutUser(req: Request, res: Response) {
-  res.cookie("auth_token", "", { maxAge: 0 });
+  res.cookie("auth_token", "", { expires: new Date(0) });
   res.sendStatus(200);
 }
 

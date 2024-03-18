@@ -15,7 +15,11 @@ export const LogOut = () => {
 
   return (
     <Button disabled={status === "pending"} onClick={() => logOut()}>
-      Logout
+      {status === "pending" ? (
+        <i className="pi pi-spin pi-spinner" />
+      ) : (
+        "Logout"
+      )}
     </Button>
   );
 };

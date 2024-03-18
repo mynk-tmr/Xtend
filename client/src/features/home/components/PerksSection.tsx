@@ -61,7 +61,7 @@ export const PerksSection = () => {
             }>
             <ul>
               {perk.feats.map((feat) => (
-                <li key={feat}>
+                <li key={feat} className="flex gap-x-2">
                   <i className="pi pi-check-circle text-grass p-1 ml-4"></i>
                   {feat}
                 </li>

@@ -5,7 +5,7 @@
     "lint:client": "cd client && npm run lint",
     "lint:api": "cd api && npm run lint",
     "dev": "concurrently --kill-others \"npm run dev:client\" \"npm run dev:api\"",
-    "precommit": "concurrently --kill-others \"npm run lint:client\" \"npm run lint:api\"",
+    "precommit": "cd client && npm run lint && cd ../api && npm run lint",
     "commit": "git commit"
   }
 }

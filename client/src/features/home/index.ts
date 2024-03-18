@@ -1,1 +1,1 @@
-export * from "./routes";
+export { HomePage } from "./components/Page";
