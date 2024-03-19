@@ -1,7 +1,6 @@
-import { LoginForm } from "../components/LoginForm";
-import { SkewedBackground } from "../components/Decorations";
+import { LoginForm } from "./LoginForm";
 import { useAppContext } from "@/providers/AppContextProvider";
-import { Profile } from "../components/Profile";
+import { Profile } from "./Profile";
 import { Navigate, useLocation } from "react-router-dom";
 
 export const Page = () => {
@@ -10,12 +9,5 @@ export const Page = () => {
   if (isVerifying) return null;
   if (user && state?.to)
     return <Navigate to={state.to} state={state} replace />;
-  return (
-    <section className="grid place-items-center p-5">
-      <section className="relative max-w-prose">
-        <SkewedBackground />
-        {user ? <Profile user={user} /> : <LoginForm />}
-      </section>
-    </section>
-  );
+  return user ? <Profile user={user} /> : <LoginForm />
 };

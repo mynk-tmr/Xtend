@@ -11,7 +11,6 @@ export default function () {
   const changeImages = useCallback(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
       if (!ev.target.files) return;
-      setImages([]);
       for (const file of ev.target.files) {
         const reader = new FileReader();
         reader.readAsDataURL(file); //start async reading
@@ -28,5 +27,8 @@ export default function () {
     },
     []
   );
-  return { images, changeImages };
+
+  const clearImages = useCallback(() => setImages([]), []);
+
+  return { images, changeImages, clearImages };
 }

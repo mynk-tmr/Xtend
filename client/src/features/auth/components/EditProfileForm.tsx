@@ -1,6 +1,5 @@
 import { api } from "../services/api";
 import { RefObject, useRef } from "react";
-import { EmailField, Fullname } from "./FormElements";
 import { useForm } from "react-hook-form";
 import { LoginValues } from "../types/creds";
 import { Button } from "primereact/button";
@@ -61,12 +60,7 @@ export const EditProfileForm = (props: EditProfileFormType) => {
         ref={props.uploadFileInputRef}
         onChange={changeAvatar}
       />
-      <Fullname
-        {...{ errors, register, required: false, defaultValue: user?.fullname }}
-      />
-      <EmailField
-        {...{ errors, register, required: false, defaultValue: user?.email }}
-      />
+
       <Button disabled={status === "pending"} className="w-full !block">
         {status === "pending" ? (
           <i className="pi pi-spin pi-spinner" />

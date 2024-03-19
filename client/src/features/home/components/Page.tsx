@@ -8,7 +8,7 @@ import { BottomNavLinks } from "./BottomNavLinks";
 
 export const HomePage = () => {
   return (
-    <>
+    <main className="p-4 bg-sky-100">
       <h1 className="text-center p-4 mb-5">
         <img src={logoUrl} alt="logo" />
       </h1>
@@ -20,6 +20,6 @@ export const HomePage = () => {
       <Testimonials />
       <YoutubeEmbed />
       <BottomNavLinks />
-    </>
+    </main>
   );
 };

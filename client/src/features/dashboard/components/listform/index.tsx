@@ -8,28 +8,47 @@ import useImagePreviewer from "@/hooks/useImagePreviewer";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import usePostalAPI from "@/hooks/usePostalAPI";
+import { useToast } from "@/providers/ToastProvider";
+import { Listing } from "@/common/types/listing";
+import { useRef } from "react";
 
-export const FormContainer = () => {
-  const form = useListForm();
-  const { images, changeImages } = useImagePreviewer();
+export const FormContainer = ({
+  submit,
+  withData,
+  submitBtnText,
+}: {
+  submit: (formdata: FormData) => void;
+  withData: Listing;
+  submitBtnText: string;
+}) => {
+  const form = useListForm(
+    withData ?? JSON.parse(localStorage.getItem("listdraft") ?? "{}")
+  );
+  const { images, changeImages, clearImages } = useImagePreviewer();
   const { isFetching, localities, refetch } = usePostalAPI(
     form.hookform.getValues,
     form.hookform.setValue
   );
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const toast = useToast();
+  const onValid = () => {
+    if (images.length > 6 || images.length === 0)
+      return toast.error("1-6 images are allowed");
+    const data = new FormData(formRef.current!);
+    submit(data);
+  };
 
   return (
     <form
       className="grid lg:grid-cols-2 gap-6 [&_input]:py-2"
-      onSubmit={form.hookform.handleSubmit(
-        (dt) => console.log(dt),
-        (err) => console.log(err)
-      )}>
+      onSubmit={form.hookform.handleSubmit(onValid)}>
       <Button
-        label="List"
         type="submit"
         icon="pi pi-check"
-        className="fixed bottom-4 left-16 z-50 px-6"
-      />
+        className="fixed bottom-4 left-8 z-50 px-6">
+        {submitBtnText ?? "Add Listing"}
+      </Button>
       <Fieldset
         legend={
           <b className="text-ink flex items-center gap-3">
@@ -173,8 +192,10 @@ export const FormContainer = () => {
           className="hidden"
           multiple
           id="images"
-          {...form.images}
-          onChange={changeImages}
+          onChange={(e) => {
+            clearImages();
+            changeImages(e);
+          }}
         />
         <Button
           type="button"

@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import { Listing } from "@/common/types/listing";
 
-export function useListForm() {
-  const hookform = useForm<Listing>();
+export function useListForm(values: Listing | undefined) {
+  const hookform = useForm<Listing>({
+    values,
+  });
   const { register, getValues } = hookform;
 
   const name = register("name", {
@@ -16,12 +18,7 @@ export function useListForm() {
       message: "Description should be at least 10 characters",
     },
   });
-  const images = register("images", {
-    // validate: () => {
-    //  const l = getValues("images").length;
-    // if (l === 0 || l > 6) return "Images should be between 1 and 6";
-    //},
-  });
+
   const price = register("price", {
     required: true,
     min: { value: 1, message: "Price should be atleast 1" },
@@ -76,7 +73,6 @@ export function useListForm() {
     hookform,
     name,
     description,
-    images,
     price,
     discount,
     category,
