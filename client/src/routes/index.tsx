@@ -11,6 +11,7 @@ import { AuthPage } from "@/features/auth";
 import { HomePage } from "@/features/home";
 import { PageNotFound } from "./404";
 import { AuthRequired } from "./AuthRequired";
+import { FormContainer } from "@/features/dashboard";
 
 const Router = () => {
   const router = createBrowserRouter(
@@ -31,6 +32,7 @@ const Router = () => {
         <Route element={<AuthRequired />}>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<MyListings />} />
+            <Route path="addlisting" element={<FormContainer />} />
           </Route>
         </Route>
       </Route>
