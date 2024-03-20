@@ -6,7 +6,7 @@ import { Aside } from "./Aside";
 export const Dashboard = () => {
   const { user } = useAppContext() as { user: User };
   return (
-    <section className="flex">
+    <section className="grid grid-cols-[250px_1fr] *:m-8">
       <Aside user={user} />
       <Outlet />
     </section>

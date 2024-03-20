@@ -3,7 +3,7 @@ import setJWTCookieInResponse from "../middlewares/_jwt.js";
 import { getValidationErrors } from "../middlewares/_validator.js";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
-import { uploadFiles } from "../middlewares/_cloudinary.js";
+import { uploadFile } from "../middlewares/_cloudinary.js";
 
 export async function loginUser(req: Request, res: Response) {
   try {
@@ -50,7 +50,7 @@ export async function updateUser(req: Request, res: Response) {
       new: true,
     });
     if (req.file && req.file.mimetype.startsWith("image/"))
-      user.avatar = (await uploadFiles([req.file] as Express.Multer.File[]))[0];
+      user.avatar = await uploadFile(req.file);
     await user.save();
     res.status(200).send(user);
   } catch (error) {

@@ -1,7 +1,7 @@
 import express from "express";
 import * as userController from "../controllers/_userController.js";
 import { validateLogin, validateUpdate } from "../middlewares/_validator.js";
-import { formDataParser } from "../middlewares/_cloudinary.js";
+import { mult } from "../middlewares/_cloudinary.js";
 import { verifyToken } from "../middlewares/_verifyToken.js";
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.put(
   "/update",
   verifyToken,
   validateUpdate,
-  formDataParser.single("avatar"),
+  mult.single("avatar"),
   userController.updateUser
 );
 router.get("/validate-token", verifyToken, userController.validateToken);

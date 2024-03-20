@@ -59,7 +59,7 @@ const PlanDisplayCard = () => (
 );
 
 export const Aside = ({ user }: { user: User }) => (
-  <aside className="bg-white p-4 sticky top-0 mr-8 h-screen">
+  <aside className="bg-white sticky top-8 h-screen">
     <section className="grid justify-items-center">
       <Avatar
         shape="circle"

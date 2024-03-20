@@ -17,3 +17,22 @@ export const validateUpdate = [
     .optional()
     .matches(/^[a-zA-Z\s]*$/i),
 ];
+
+export const validateListing = [
+  body("state", "invalid state").notEmpty(),
+  body("city", "invalid city").notEmpty(),
+  body("pincode", "invalid pincode").isInt({ min: 100000, max: 999999 }),
+  body("locality", "invalid locality").notEmpty(),
+
+  body("category", "invalid category").notEmpty(),
+  body("facilities", "invalid facilities").isArray(),
+
+  body("name", "invalid name").isLength({ min: 3 }),
+  body("description", "invalid description").isLength({ min: 20 }),
+
+  body("price", "invalid price").isInt({ min: 1 }),
+  body("discount", "invalid discount").isInt({ min: 0 }),
+  body("width", "invalid width").isInt({ min: 1 }),
+  body("height", "invalid height").isInt({ min: 1 }),
+  body("area", "invalid area").isFloat({ min: 1 }),
+];

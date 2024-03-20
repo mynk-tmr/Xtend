@@ -7,20 +7,19 @@ export type Listing = {
   category: string;
   facilities: string[];
   rating: number;
-  address: {
-    state: string;
-    city: string;
-    pincode: string;
-    locality: string;
-  };
-  dimensions: {
-    width: number;
-    height: number;
-    area: number;
-  };
+  state: string;
+  city: string;
+  pincode: string;
+  locality: string;
+  width: number;
+  height: number;
+  area: number;
+  lastUpdated: string;
   reviews?: {
-    name: string;
-    avatar: string;
+    user: {
+      fullname: string;
+      avatar: string;
+    };
     date: string;
     text: string;
     rating: number;

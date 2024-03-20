@@ -20,21 +20,20 @@ const listings: Listing[] = [
     category: "Furniture",
     facilities: ["Guarded", "Fire Protection", "CCTV"],
     rating: 3,
-    address: {
-      state: "Karnataka",
-      city: "Bangalore",
-      pincode: "560001",
-      locality: "BTM Layout",
-    },
-    dimensions: {
-      width: 12,
-      height: 13,
-      area: 121,
-    },
+    state: "Karnataka",
+    city: "Bangalore",
+    pincode: "560001",
+    locality: "BTM Layout",
+    width: 12,
+    height: 13,
+    area: 121,
+    lastUpdated: "2022-02-02",
     reviews: [
       {
-        name: "Rishu Kumar",
-        avatar: "https://i.pravatar.cc/300?img=5",
+        user: {
+          fullname: "Rishu Kumar",
+          avatar: "https://i.pravatar.cc/300?img=5",
+        },
         date: "2022-02-02",
         text: "Great service",
         rating: 4,
@@ -60,8 +59,7 @@ const aboutBodyTemplate = (listing: Listing) => {
       <p className="text-xs">{listing.description.slice(0, 40)}</p>
       <address className="text-xs not-italic text-grass">
         <i className="pi pi-map-marker text-[12px] mr-2"></i>
-        {listing.address.locality}, {listing.address.city},{" "}
-        {listing.address.state}
+        {listing.locality}, {listing.city}, {listing.state}
       </address>
     </div>
   );
@@ -107,12 +105,10 @@ const priceBodyTemplate = (listing: Listing) => {
 const dimensionBodyTemplate = (listing: Listing) => {
   return (
     <p className="*:text-[10px] *:m-1 *:text-white">
-      <Tag
-        className="bg-navy"
-        value={listing.dimensions.area + " sq. feet"}></Tag>
+      <Tag className="bg-navy" value={listing.area + " sq. feet"}></Tag>
       <br />
-      <Tag className="bg-love" value={"H: " + listing.dimensions.height} />
-      <Tag className="bg-love" value={"W: " + listing.dimensions.width} />
+      <Tag className="bg-love" value={"H: " + listing.height} />
+      <Tag className="bg-love" value={"W: " + listing.width} />
     </p>
   );
 };
@@ -130,7 +126,7 @@ const ratingBodyTemplate = (listing: Listing) => {
             text: { className: "text-xs text-balance" },
             root: { className: "max-w-[16ch]" },
           }}
-          text={`"${listing.reviews[0].text}" - ${listing.reviews[0].name}`}
+          text={`"${listing.reviews[0].text}" - ${listing.reviews[0].user.fullname}`}
         />
       ) : (
         <p className="text-xs">No reviews</p>
