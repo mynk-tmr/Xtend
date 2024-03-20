@@ -1,6 +1,5 @@
 import { LoginForm } from "./LoginForm";
 import { useAppContext } from "@/providers/AppContextProvider";
-import { Profile } from "./Profile";
 import { Navigate, useLocation } from "react-router-dom";
 
 export const Page = () => {
@@ -9,5 +8,6 @@ export const Page = () => {
   if (isVerifying) return null;
   if (user && state?.to)
     return <Navigate to={state.to} state={state} replace />;
-  return user ? <Profile user={user} /> : <LoginForm />
+  if (user) return <Navigate to="/dashboard/profile" replace />;
+  return <LoginForm />;
 };

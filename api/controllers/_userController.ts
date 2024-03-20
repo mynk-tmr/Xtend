@@ -41,6 +41,10 @@ export async function logoutUser(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
   try {
+    const errors = getValidationErrors(req);
+    if (errors) {
+      return res.status(400).send(errors);
+    }
     for (const key in req.body) if (!req.body[key]) delete req.body[key];
     const user = await User.findByIdAndUpdate(req.userId, req.body, {
       new: true,

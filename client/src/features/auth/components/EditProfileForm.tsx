@@ -1,68 +1,55 @@
-import { api } from "../services/api";
-import { RefObject, useRef } from "react";
-import { useForm } from "react-hook-form";
-import { LoginValues } from "../types/creds";
+import { RefObject } from "react";
 import { Button } from "primereact/button";
-import { useMutation } from "@tanstack/react-query";
-import { useToast } from "@/providers/ToastProvider";
 import { useAppContext } from "@/providers/AppContextProvider";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
+import { Form, useNavigation } from "react-router-dom";
 
 type EditProfileFormType = {
   uploadFileInputRef: RefObject<HTMLInputElement>;
   setAvatarUrl: React.Dispatch<React.SetStateAction<string>>;
-  setEditEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const EditProfileForm = (props: EditProfileFormType) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginValues>();
-
-  const formRef = useRef<HTMLFormElement>(null);
-  const toast = useToast();
-  const { verifyUser, user } = useAppContext();
-
-  const { mutate: onSubmit, status } = useMutation({
-    mutationFn: async () => {
-      if (formRef.current) {
-        await api.update(new FormData(formRef.current));
-        verifyUser();
-        toast.success("Profile updated");
-        props.setEditEnabled(false);
-      }
-    },
-    onError: () => toast.error("Failed to update profile"),
-  });
+  const { uploadFileInputRef, setAvatarUrl } = props;
+  const { user } = useAppContext();
+  const { state } = useNavigation();
 
   const changeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files?.[0];
     if (files) {
       const reader = new FileReader();
       reader.readAsDataURL(files);
-      reader.onload = () => props.setAvatarUrl(reader.result as string);
+      reader.onload = () => setAvatarUrl(reader.result as string);
     } else {
-      props.setAvatarUrl(user?.avatar || "");
+      setAvatarUrl(user?.avatar || "");
     }
   };
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit(() => onSubmit())}
+    <Form
+      method="post"
       encType="multipart/form-data"
-      className="*:flex *:flex-col *:gap-2 [&_input]:py-2 space-y-4 [&_label]:text-xs">
+      className="*:flex *:flex-col *:gap-2 [&_input]:py-2 space-y-4 [&_label]:text-xs grid sm:grid-cols-2 sm:items-center">
       <input
         type="file"
         name="avatar"
         className="!hidden"
-        ref={props.uploadFileInputRef}
+        ref={uploadFileInputRef}
         onChange={changeAvatar}
       />
 
-      <Button disabled={status === "pending"} className="w-full !block">
-        {status === "pending" ? (
+      <label htmlFor="fullname">Change Full Name</label>
+      <InputText id="fullname" name="fullname" placeholder={user?.fullname} />
+
+      <label htmlFor="email">Change Email</label>
+      <InputText id="email" name="email" placeholder={user?.email} />
+
+      <label htmlFor="password">Change Password</label>
+      <Password id="password" name="password" toggleMask feedback={false} />
+
+      <Button disabled={state === "submitting"} className="col-start-2">
+        {state === "submitting" ? (
           <i className="pi pi-spin pi-spinner" />
         ) : (
           <span>
@@ -70,6 +57,6 @@ export const EditProfileForm = (props: EditProfileFormType) => {
           </span>
         )}
       </Button>
-    </form>
+    </Form>
   );
 };
