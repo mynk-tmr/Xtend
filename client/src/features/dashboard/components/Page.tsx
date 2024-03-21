@@ -1,4 +1,4 @@
-import { User } from "@/common/types/user";
+import { User } from "@/types/user";
 import { useAppContext } from "@/providers/AppContextProvider";
 import { Outlet } from "react-router-dom";
 import { Aside } from "./Aside";

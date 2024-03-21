@@ -1,5 +1,6 @@
 export type Listing = {
   _id: string;
+  userId: string;
   name: string;
   description: string;
   images: string[];
@@ -16,13 +17,4 @@ export type Listing = {
   height: number;
   area: number;
   lastUpdated: string;
-  reviews?: {
-    user: {
-      fullname: string;
-      avatar: string;
-    };
-    date: string;
-    text: string;
-    rating: number;
-  }[];
 };

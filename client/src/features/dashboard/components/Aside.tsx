@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { Avatar } from "primereact/avatar";
 import { Link } from "react-router-dom";
-import { User } from "@/common/types/user";
+import { User } from "@/types/user";
 
 const AsideMenu = () => {
   const { pathname: pt } = useLocation();

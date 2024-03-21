@@ -1,10 +1,10 @@
-import { LoginValues } from "../types/creds";
+import { AuthCredentials } from "@/types/auth";
 import { apiclient } from "@/lib/apiclient";
 
 const prefix = "auth/";
 
 export const api = {
-  login: async ({ email, password }: LoginValues) => {
+  login: async ({ email, password }: AuthCredentials) => {
     return await apiclient
       .post(prefix + "login", {
         json: {

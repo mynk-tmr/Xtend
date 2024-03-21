@@ -5,7 +5,7 @@ import { EditProfileForm } from "./EditProfileForm";
 import { isoToLocale } from "@/lib/intl";
 import { useAppContext } from "@/providers/AppContextProvider";
 import { Button } from "primereact/button";
-import { RouteActionData } from "@/common/types/actions";
+import { RouteActionData } from "@/types/actions";
 import { useActionData } from "react-router-dom";
 import { useToast } from "@/providers/ToastProvider";
 

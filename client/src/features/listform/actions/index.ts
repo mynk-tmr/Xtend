@@ -1,4 +1,4 @@
-import { Listing } from "@/common/types/listing";
+import { Listing } from "@/types/listing";
 import { apiclient } from "@/lib/apiclient";
 import { ActionFunctionArgs } from "react-router-dom";
 

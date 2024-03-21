@@ -2,7 +2,7 @@
 import { createContext, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiclient } from "@/lib/apiclient";
-import { User } from "@/common/types/user";
+import { User } from "@/types/user";
 
 type AppContextType = {
   isVerifying: boolean;

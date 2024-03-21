@@ -1,9 +1,8 @@
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import { Listing } from "@/common/types/listing";
+import { Listing } from "@/types/listing";
 import { Tag } from "primereact/tag";
-import { Message } from "primereact/message";
 import { useQuery } from "@tanstack/react-query";
 import { apiclient } from "@/lib/apiclient";
 import { useToast } from "@/providers/ToastProvider";
@@ -89,18 +88,6 @@ const ratingBodyTemplate = (listing: Listing) => {
       <p>
         Average <i className="pi pi-star"></i> {listing.rating}
       </p>
-      {listing.reviews?.length ? (
-        <Message
-          severity="info"
-          pt={{
-            text: { className: "text-xs text-balance" },
-            root: { className: "max-w-[16ch]" },
-          }}
-          text={`"${listing.reviews[0].text}" - ${listing.reviews[0].user.fullname}`}
-        />
-      ) : (
-        <p className="text-xs">No reviews</p>
-      )}
     </div>
   );
 };

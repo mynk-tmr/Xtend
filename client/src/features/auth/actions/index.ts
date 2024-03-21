@@ -1,4 +1,4 @@
-import { User } from "@/common/types/user";
+import { User } from "@/types/user";
 import { api } from "../services/api";
 
 export async function signInAction({ request }: { request: Request }) {

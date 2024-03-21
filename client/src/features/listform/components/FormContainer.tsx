@@ -11,10 +11,10 @@ import {
   ImagePicker,
 } from "./FormSections";
 import { Button } from "primereact/button";
-import { RouteActionData } from "@/common/types/actions";
+import { RouteActionData } from "@/types/actions";
 import { createContext, useContext, useEffect } from "react";
 import { useToast } from "@/providers/ToastProvider";
-import { Listing } from "@/common/types/listing";
+import { Listing } from "@/types/listing";
 
 const FormContext = createContext<Listing | null>(null);
 // eslint-disable-next-line react-refresh/only-export-components

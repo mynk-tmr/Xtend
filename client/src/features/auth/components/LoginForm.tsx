@@ -9,7 +9,7 @@ import { Checkbox } from "primereact/checkbox";
 import { Password } from "primereact/password";
 import { useAppContext } from "@/providers/AppContextProvider";
 import { useToast } from "@/providers/ToastProvider";
-import { RouteActionData } from "@/common/types/actions";
+import { RouteActionData } from "@/types/actions";
 
 export const LoginForm = () => {
   const [forgotPassword, setForgotPassword] = useState(false);

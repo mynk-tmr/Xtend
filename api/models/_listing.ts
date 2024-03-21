@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
+import { Listing as ListingType } from "@/types/listing";
 
 const requiredString = { type: String, required: true };
 const requiredNumber = { type: Number, required: true };
 const requiredDate = { type: Date, required: true };
 
-const listingSchema = new mongoose.Schema({
+interface ListingTS extends Omit<ListingType, "lastUpdated"> {
+  lastUpdated: Date;
+}
+
+const listingSchema = new mongoose.Schema<ListingTS>({
   userId: requiredString,
   name: requiredString,
   description: requiredString,
@@ -22,14 +27,6 @@ const listingSchema = new mongoose.Schema({
   height: requiredNumber,
   area: requiredNumber,
   lastUpdated: requiredDate,
-  reviews: [
-    {
-      user: requiredString,
-      date: requiredDate,
-      text: requiredString,
-      rating: requiredNumber,
-    },
-  ],
 });
 
 listingSchema.pre("save", async function () {

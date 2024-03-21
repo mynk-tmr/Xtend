@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { User as UserType } from "@/types/user";
 
 const requiredString = { type: String, required: true };
 const uniqueString = { ...requiredString, unique: true };
 const requiredDate = { type: Date, required: true };
 
-const userSchema = new mongoose.Schema({
+interface UserServer extends Omit<UserType, "joined"> {
+  joined: Date;
+}
+
+const userSchema = new mongoose.Schema<UserServer>({
   email: uniqueString,
   password: requiredString,
   fullname: { type: String },
