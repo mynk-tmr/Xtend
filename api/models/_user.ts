@@ -6,11 +6,11 @@ const requiredString = { type: String, required: true };
 const uniqueString = { ...requiredString, unique: true };
 const requiredDate = { type: Date, required: true };
 
-interface UserServer extends Omit<UserType, "joined"> {
+interface U extends Omit<UserType, "joined"> {
   joined: Date;
 }
 
-const userSchema = new mongoose.Schema<UserServer>({
+const userSchema = new mongoose.Schema<U>({
   email: uniqueString,
   password: requiredString,
   fullname: { type: String },

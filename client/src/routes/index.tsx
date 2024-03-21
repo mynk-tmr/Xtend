@@ -14,6 +14,7 @@ import { signInAction } from "@/features/auth";
 import { Profile } from "@/features/auth";
 import { FormContainer, addListAction } from "@/features/listform";
 import { EditListing } from "@/features/dashboard";
+import { BookingsPage } from "@/features/booking";
 
 const Router = () => {
   const router = createBrowserRouter(
@@ -44,6 +45,7 @@ const Router = () => {
               loader={EditListing.loader}
               action={addListAction}
             />
+            <Route path="bookings" element={<BookingsPage />} />
           </Route>
         </Route>
       </Route>

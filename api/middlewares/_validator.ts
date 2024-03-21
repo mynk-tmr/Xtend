@@ -34,3 +34,8 @@ export const validateListing = [
   body("height", "invalid height").isInt({ min: 1 }),
   body("area", "invalid area").isFloat({ min: 1 }),
 ];
+
+export const validateBooking = [
+  body("start", "invalid start date").isISO8601(),
+  body("end", "invalid end date").isISO8601(),
+];

@@ -5,11 +5,11 @@ const requiredString = { type: String, required: true };
 const requiredNumber = { type: Number, required: true };
 const requiredDate = { type: Date, required: true };
 
-interface ListingTS extends Omit<ListingType, "lastUpdated"> {
+interface L extends Omit<ListingType, "lastUpdated"> {
   lastUpdated: Date;
 }
 
-const listingSchema = new mongoose.Schema<ListingTS>({
+const listingSchema = new mongoose.Schema<L>({
   userId: requiredString,
   name: requiredString,
   description: requiredString,

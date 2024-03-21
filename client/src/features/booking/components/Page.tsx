@@ -3,25 +3,34 @@ import { apiclient } from "@/lib/apiclient";
 import { AsyncUI } from "@/common/components/AsyncUI";
 import { Booking } from "@/types/booking";
 
-const BookingsPage = () => {
-  const { data, isPending, refetch } = useQuery({
+export const BookingsPage = () => {
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["mybookings"],
-    queryFn: async () => {
-      try {
-        return (await apiclient.get("bookings/all").json()) as Booking[];
-      } catch (e) {
-        return null;
-      }
-    },
+    retry: 3,
+    queryFn: async () =>
+      (await apiclient.get("bookings/all").json()) as Booking[],
   });
 
-  if (isPending) {
+  if (isLoading) {
     return <AsyncUI.Loading />;
   }
 
-  if (!data) {
+  if (isError) {
     return <AsyncUI.Error refetch={refetch} />;
   }
+
+  if (!data || !data.length) {
+    return (
+      <section className="grid place-items-center">
+        <h1 className="text-xl">You do not have any Bookings ...</h1>
+        <i className="pi pi-shopping-cart text-5xl" />
+        <p className="text-ink font-semibold animate-pulse">
+          You can going to search page or use menu to book a new
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section>
       <h1 className="text-3xl font-bold text-navy">My Bookings</h1>
@@ -31,5 +40,3 @@ const BookingsPage = () => {
     </section>
   );
 };
-
-export default BookingsPage;

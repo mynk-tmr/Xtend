@@ -25,6 +25,6 @@ router.get("/all", verifyToken, listingController.getAllUserList);
 
 router.get("/:id", verifyToken, listingController.getOneUserList);
 
-router.delete("/:id", verifyToken, listingController.deleteList);
+router.delete("/:id", /* verifyToken ,*/ listingController.deleteList);
 
 export default router;

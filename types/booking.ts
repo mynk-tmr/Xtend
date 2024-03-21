@@ -4,6 +4,7 @@ export type Booking = {
   start: Date;
   end: Date;
   price: number;
+  status: "pending" | "accepted" | "rejected";
   review: {
     rating: number;
     text: string;
