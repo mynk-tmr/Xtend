@@ -13,6 +13,7 @@ export async function addList(req: Request, res: Response) {
     list.images = await uploadFiles(req.files as Express.Multer.File[]);
     list.userId = req.userId;
     list.rating = 1;
+    list.lastUpdated = new Date();
     const listing = new Listing(list);
     await listing.save();
     return res.status(201).send(listing);
@@ -29,6 +30,9 @@ export async function updateList(req: Request, res: Response) {
   }
   try {
     const oldlist = req.body;
+    oldlist.images = [oldlist.previousImages ?? []].flat(
+      Infinity
+    ); /* since previousImages can be single value */
     const list = await Listing.findOneAndUpdate(
       {
         _id: req.params.id.toString(),
@@ -39,7 +43,7 @@ export async function updateList(req: Request, res: Response) {
     );
     if (!list) return res.sendStatus(404);
     const newImages = await uploadFiles(req.files as Express.Multer.File[]);
-    list.images = [...newImages, ...(list.images || [])];
+    list.images = [...newImages, ...list.images];
     await list.save();
     return res.status(201).send(list);
   } catch (err) {
@@ -50,8 +54,10 @@ export async function updateList(req: Request, res: Response) {
 
 export async function getOneUserList(req: Request, res: Response) {
   try {
-    const id = req.params.id.toString();
-    const listing = await Listing.findOne({ userId: req.userId, _id: id });
+    const listing = await Listing.findOne({
+      userId: req.userId,
+      _id: req.params.id,
+    });
     if (!listing) return res.sendStatus(404);
     return res.status(200).send(listing);
   } catch (err) {

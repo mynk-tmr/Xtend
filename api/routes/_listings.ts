@@ -8,16 +8,16 @@ const router = express.Router();
 router.post(
   "/add",
   verifyToken,
-  validateListing,
   mult.array("images", 6),
+  validateListing,
   listingController.addList
 );
 
 router.put(
-  "/:id",
+  "/add/:id",
   verifyToken,
-  validateListing,
   mult.array("images", 6),
+  validateListing,
   listingController.updateList
 );
 

@@ -1,2 +1,3 @@
+export { ListingTable } from "./components/Table";
 export { Dashboard } from "./components/Page";
-export { MyListings } from "./components/MyListings";
+export { EditListing } from "./components/EditListing";

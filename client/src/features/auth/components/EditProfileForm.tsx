@@ -2,7 +2,6 @@ import { RefObject } from "react";
 import { Button } from "primereact/button";
 import { useAppContext } from "@/providers/AppContextProvider";
 import { InputText } from "primereact/inputtext";
-import { Password } from "primereact/password";
 import { Form, useNavigation } from "react-router-dom";
 
 type EditProfileFormType = {
@@ -40,13 +39,10 @@ export const EditProfileForm = (props: EditProfileFormType) => {
       />
 
       <label htmlFor="fullname">Change Full Name</label>
-      <InputText id="fullname" name="fullname" placeholder={user?.fullname} />
+      <InputText id="fullname" name="fullname" defaultValue={user?.fullname} />
 
       <label htmlFor="email">Change Email</label>
-      <InputText id="email" name="email" placeholder={user?.email} />
-
-      <label htmlFor="password">Change Password</label>
-      <Password id="password" name="password" toggleMask feedback={false} />
+      <InputText id="email" name="email" defaultValue={user?.email} />
 
       <Button disabled={state === "submitting"} className="col-start-2">
         {state === "submitting" ? (

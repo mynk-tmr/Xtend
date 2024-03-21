@@ -1,7 +1,8 @@
 import { Listing } from "@/common/types/listing";
 import { apiclient } from "@/lib/apiclient";
+import { ActionFunctionArgs } from "react-router-dom";
 
-export async function addListAction({ request }: { request: Request }) {
+export async function addListAction({ request, params }: ActionFunctionArgs) {
   const form = await request.formData();
   const data = Object.fromEntries(form) as unknown as Listing;
   if (data.name.length < 3)
@@ -20,15 +21,25 @@ export async function addListAction({ request }: { request: Request }) {
   if (!data.locality) return { error: "Locality is required" };
   if (!data.category) return { error: "Category is required" };
   if (!data.facilities) return { error: "Atleast 1 Facility is required" };
-  if (form.getAll("images").length < 1 || form.getAll("images").length > 6)
-    return { error: "Select 1 to 6 images" };
+
+  //@ts-expect-error name exists on fileList objects
+  const l1 = form.getAll("images").filter(({ name }) => name).length;
+  const l2 = form.getAll("previousImages").length || 0;
+  const length = l1 + l2;
+  if (length > 6 || length < 1) return { error: "Select 1 to 6 images" };
 
   try {
-    await apiclient.post("listings/add", {
-      body: form,
-    });
+    if (request.method === "POST") {
+      await apiclient.post("listings/add", {
+        body: form,
+      });
+    } else if (request.method === "PUT") {
+      await apiclient.put(`listings/add/${params.id}`, {
+        body: form,
+      });
+    }
   } catch (e) {
-    return { error: "Couldn't add listing." };
+    return { error: "Couldn't save listing." };
   }
   return { ok: true };
 }

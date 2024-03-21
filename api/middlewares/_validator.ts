@@ -12,10 +12,8 @@ export const validateLogin = [
 ];
 
 export const validateUpdate = [
-  body("email", "invalid email").optional().isEmail(),
-  body("fullname", "invalid fullname")
-    .optional()
-    .matches(/^[a-zA-Z\s]*$/i),
+  body("email", "invalid email").isEmail(),
+  body("fullname", "invalid fullname").matches(/^[a-zA-Z\s]*$/i),
 ];
 
 export const validateListing = [

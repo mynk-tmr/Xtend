@@ -1,2 +1,2 @@
 export { FormContainer } from "./components/FormContainer";
-export { addListAction } from "./actions/addList";
+export { addListAction } from "./actions";

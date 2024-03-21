@@ -5,6 +5,7 @@ const requiredNumber = { type: Number, required: true };
 const requiredDate = { type: Date, required: true };
 
 const listingSchema = new mongoose.Schema({
+  userId: requiredString,
   name: requiredString,
   description: requiredString,
   images: [requiredString],

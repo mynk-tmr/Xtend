@@ -1,4 +1,9 @@
-import { Form, useActionData } from "react-router-dom";
+import {
+  Form,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import {
   CategoryFacilites,
   IDDetails,
@@ -7,26 +12,56 @@ import {
 } from "./FormSections";
 import { Button } from "primereact/button";
 import { RouteActionData } from "@/common/types/actions";
-import { useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useToast } from "@/providers/ToastProvider";
+import { Listing } from "@/common/types/listing";
 
-export const FormContainer = () => {
+const FormContext = createContext<Listing | null>(null);
+// eslint-disable-next-line react-refresh/only-export-components
+export const useFormContext = () => useContext(FormContext);
+
+export const FormContainer = ({
+  defaultValues = null,
+}: {
+  defaultValues?: Listing | null;
+}) => {
   const res = useActionData() as RouteActionData;
   const toast = useToast();
+  const { state } = useNavigation();
+  const goto = useNavigate();
+  const submitText = defaultValues ? "Update Listing" : "Add Listing";
+
   useEffect(() => {
-    if (res?.ok) toast.success("Listing Added");
-    else if (res?.error) toast.error(res.error);
-  }, [res, toast]);
+    if (res?.ok) {
+      toast.success("Saved your listing");
+      goto("/dashboard");
+    } else if (res?.error) toast.error(res.error);
+    return () => {
+      if (res?.ok) res.ok = false;
+      if (res?.error) res.error = "";
+    };
+  }, [res, toast, goto]);
+
   return (
-    <Form
-      encType="multipart/form-data"
-      method="post"
-      className="grid md:grid-cols-2 gap-8">
-      <IDDetails />
-      <PriceFeatures />
-      <CategoryFacilites />
-      <ImagePicker />
-      <Button label="Add Listing" className="bg-love" />
-    </Form>
+    <FormContext.Provider value={defaultValues}>
+      <Form
+        encType="multipart/form-data"
+        method={defaultValues ? "put" : "post"}
+        className="grid md:grid-cols-2 gap-8">
+        <IDDetails />
+        <PriceFeatures />
+        <CategoryFacilites />
+        <ImagePicker />
+        <Button className="bg-fuchsia-600 h-[5ch]">
+          {state === "submitting" ? (
+            <i className="pi pi-spin pi-spinner m-2"></i>
+          ) : (
+            <span>
+              <i className="pi pi-save m-2"></i> {submitText}
+            </span>
+          )}
+        </Button>
+      </Form>
+    </FormContext.Provider>
   );
 };

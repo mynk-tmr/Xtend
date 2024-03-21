@@ -5,7 +5,7 @@ import {
   createBrowserRouter,
   createRoutesFromChildren,
 } from "react-router-dom";
-import { Dashboard, MyListings } from "@/features/dashboard";
+import { Dashboard, ListingTable } from "@/features/dashboard";
 import { AuthPage, updateUserInfoAction } from "@/features/auth";
 import { HomePage } from "@/features/home";
 import { PageNotFound } from "./404";
@@ -13,6 +13,7 @@ import { AuthRequired } from "./AuthRequired";
 import { signInAction } from "@/features/auth";
 import { Profile } from "@/features/auth";
 import { FormContainer, addListAction } from "@/features/listform";
+import { EditListing } from "@/features/dashboard";
 
 const Router = () => {
   const router = createBrowserRouter(
@@ -26,16 +27,22 @@ const Router = () => {
         <Route path="*" element={<PageNotFound />} />
         <Route element={<AuthRequired />}>
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<MyListings />} />
+            <Route index element={<ListingTable />} />
             <Route
               path="addlisting"
-              element={<FormContainer />}
               action={addListAction}
+              element={<FormContainer />}
             />
             <Route
               path="profile"
               element={<Profile />}
               action={updateUserInfoAction}
+            />
+            <Route
+              path="edit/:id"
+              element={<EditListing />}
+              loader={EditListing.loader}
+              action={addListAction}
             />
           </Route>
         </Route>

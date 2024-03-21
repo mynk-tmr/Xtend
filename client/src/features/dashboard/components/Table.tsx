@@ -1,54 +1,24 @@
-import { useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Listing } from "@/common/types/listing";
 import { Tag } from "primereact/tag";
 import { Message } from "primereact/message";
-
-const listings: Listing[] = [
-  {
-    name: "Jain Storage",
-    description: "Description of listing 1",
-    images: [
-      "http://picsum.photos/400/300/?random=1",
-      "http://picsum.photos/400/300/?random=2",
-      "http://picsum.photos/400/300/?random=3",
-    ],
-    price: 1000,
-    discount: 30,
-    category: "Furniture",
-    facilities: ["Guarded", "Fire Protection", "CCTV"],
-    rating: 3,
-    state: "Karnataka",
-    city: "Bangalore",
-    pincode: "560001",
-    locality: "BTM Layout",
-    width: 12,
-    height: 13,
-    area: 121,
-    lastUpdated: "2022-02-02",
-    reviews: [
-      {
-        user: {
-          fullname: "Rishu Kumar",
-          avatar: "https://i.pravatar.cc/300?img=5",
-        },
-        date: "2022-02-02",
-        text: "Great service",
-        rating: 4,
-      },
-    ],
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { apiclient } from "@/lib/apiclient";
+import { useToast } from "@/providers/ToastProvider";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const imageBodyTemplate = (listing: Listing) => {
   return (
-    <img
-      src={listing.images[0]}
-      alt="listing"
-      className="w-32 shadow-2 rounded-md"
-    />
+    <Link to={`/dashboard/edit/${listing._id}`} state={{ listing }}>
+      <img
+        src={listing.images[0]}
+        alt="listing"
+        className="w-32 shadow-2 rounded-md"
+      />
+    </Link>
   );
 };
 
@@ -135,29 +105,49 @@ const ratingBodyTemplate = (listing: Listing) => {
   );
 };
 
-const header = (
-  <header>
-    <span className="inline-flex gap-4 items-center text-xl font-bold ">
-      Listings
-    </span>
-    <Button icon="pi pi-refresh" className="size-8 ml-8" rounded raised />
-  </header>
-);
+const Heading = ({
+  refetch,
+  isLoading,
+}: {
+  refetch: () => void;
+  isLoading: boolean;
+}) => {
+  return (
+    <header>
+      <span className="inline-flex gap-4 items-center text-xl font-bold ">
+        Listings
+      </span>
+      <Button
+        onClick={refetch}
+        icon="pi pi-refresh"
+        className={`size-8 ml-8 ${isLoading && "animate-spin"}`}
+        rounded
+        raised
+      />
+    </header>
+  );
+};
 
 export const ListingTable = () => {
-  // const [listings, setListings] = useState<Listing[]>([]);
+  const toast = useToast();
+  const { data, refetch, isPending, isError } = useQuery<Listing[]>({
+    queryKey: ["mylistings"],
+    queryFn: () => apiclient.get("listings/all").json(),
+  });
 
   useEffect(() => {
-    //setproduc
-  }, []);
+    if (isError) {
+      toast.error("Failed to fetch listings");
+    }
+  }, [isError, toast]);
 
   return (
     <DataTable
       pt={{
         headerRow: { className: "text-sm " },
       }}
-      value={listings}
-      header={header}
+      value={data}
+      header={<Heading {...{ refetch, isLoading: isPending }} />}
       tableStyle={{ minWidth: "60rem" }}>
       <Column header="Listing" body={imageBodyTemplate}></Column>
       <Column header="About" body={aboutBodyTemplate}></Column>

@@ -11,8 +11,8 @@ router.post("/logout", userController.logoutUser);
 router.put(
   "/update",
   verifyToken,
-  validateUpdate,
   mult.single("avatar"),
+  validateUpdate,
   userController.updateUser
 );
 router.get("/validate-token", verifyToken, userController.validateToken);
