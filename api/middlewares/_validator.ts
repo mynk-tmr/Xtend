@@ -23,7 +23,7 @@ export const validateListing = [
   body("locality", "invalid locality").notEmpty(),
 
   body("category", "invalid category").notEmpty(),
-  body("facilities", "invalid facilities").isArray(),
+  body("facilities", "invalid facilities").notEmpty(),
 
   body("name", "invalid name").isLength({ min: 3 }),
   body("description", "invalid description").isLength({ min: 20 }),

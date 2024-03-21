@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Booking } from "../models/_booking.js";
 import { Listing } from "../models/_listing.js";
+import { getValidationErrors } from "../middlewares/_validator.js";
 
 export async function getAllBookings(req: Request, res: Response) {
   const bookings = await Booking.find({
@@ -19,6 +20,10 @@ export async function getOneBooking(req: Request, res: Response) {
 }
 
 export async function requestBooking(req: Request, res: Response) {
+  const errors = getValidationErrors(req);
+  if (errors) {
+    return res.status(400).send(errors);
+  }
   const listing = await Listing.findOne({ _id: req.params.id });
   if (!listing) return res.sendStatus(404);
 

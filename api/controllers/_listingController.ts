@@ -11,6 +11,7 @@ export async function addList(req: Request, res: Response) {
   }
   try {
     const list = req.body;
+    list.facilities = [list.facilities].flat(Infinity);
     list.images = await uploadFiles(req.files as Express.Multer.File[]);
     list.userId = req.userId;
     list.rating = 1;
@@ -31,9 +32,8 @@ export async function updateList(req: Request, res: Response) {
   }
   try {
     const oldlist = req.body;
-    oldlist.images = [oldlist.previousImages ?? []].flat(
-      Infinity
-    ); /* since previousImages can be single value */
+    oldlist.facilities = [oldlist.facilities].flat(Infinity);
+    oldlist.images = [oldlist.previousImages ?? []].flat(Infinity);
     const list = await Listing.findOneAndUpdate(
       {
         _id: req.params.id.toString(),

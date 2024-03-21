@@ -9,11 +9,14 @@
 }
 
 @layer base {
+  :root {
+    scrollbar-gutter: stable both-edges;
+  }
   #root > main {
     @apply min-h-screen;
   }
   *::-webkit-scrollbar {
-    @apply bg-white w-2;
+    @apply w-2;
   }
   *::-webkit-scrollbar-thumb {
     @apply bg-navy rounded;
