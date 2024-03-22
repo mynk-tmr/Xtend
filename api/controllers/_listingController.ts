@@ -2,6 +2,7 @@ import { uploadFiles } from "../middlewares/_cloudinary.js";
 import { Listing } from "../models/_listing.js";
 import { getValidationErrors } from "../middlewares/_validator.js";
 import { Request, Response } from "express";
+import { Booking } from "../models/_booking.js";
 import q2m from "query-to-mongo";
 
 export async function addList(req: Request, res: Response) {
@@ -111,6 +112,16 @@ export async function getAllList(req: Request, res: Response) {
     query.options.skip ??= 0;
     query.options.limit ??= 3;
     query.options.sort ??= { createdAt: -1 };
+
+    const bookings = await Booking.find({
+      userId: req.userId,
+    });
+
+    query.criteria = {
+      ...query.criteria,
+      _id: { $not: { $in: bookings.map((b) => b.listingId) } },
+    };
+
     const count = await Listing.countDocuments(query.criteria);
     const listings = await Listing.find(query.criteria)
       //@ts-expect-error sort types not provided by library

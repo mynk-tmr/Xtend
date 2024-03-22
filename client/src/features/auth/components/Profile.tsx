@@ -51,7 +51,7 @@ const UserAvatarAndInfo = ({ editEnabled }: { editEnabled: boolean }) => {
       <div className="relative">
         <Avatar
           image={avatarUrl}
-          label="M"
+          label={user?.fullname[0]}
           shape="circle"
           className={`size-48 m-8 p-overlay-badge ${
             editEnabled ? "ring-4 ring-ink" : ""

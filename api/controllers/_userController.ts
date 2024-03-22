@@ -21,6 +21,7 @@ export async function loginUser(req: Request, res: Response) {
     } else if (!user) {
       user = new User({
         email: req.body.email,
+        fullname: "Guest",
         password: req.body.password,
         joined: new Date(),
       });

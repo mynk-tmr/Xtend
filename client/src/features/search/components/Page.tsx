@@ -1,17 +1,21 @@
-import { apiclient } from "@/lib/apiclient";
-import { Listing } from "@/types/listing";
-import { Link, LoaderFunction, useLoaderData } from "react-router-dom";
+import {
+  LoaderFunction,
+  defer,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 import { DataViewer } from "./DataViewer";
-import logoUrl from "@/common/assets/logo.png";
 import { SearchForm } from "./SearchForm";
 import { Fieldset } from "primereact/fieldset";
+import { SearchResult, api } from "../services/api";
+import Pagination from "./Paginator";
+import { XtendedLogo } from "@/common/components/XtendedLogo";
+import { AsyncUI } from "@/common/components/AsyncUI";
 
 const Header = () => {
   return (
     <header>
-      <Link to="/" className="mx-auto block w-fit">
-        <img src={logoUrl} alt="logo" />
-      </Link>
+      <XtendedLogo />
       <h1 className="font-semibold mb-8 text-center">
         Let us help you find that perfect storage.
       </h1>
@@ -29,27 +33,39 @@ const Header = () => {
 };
 
 export const SearchPage = () => {
-  const listings = useLoaderData() as Listing[];
+  const { res } = useLoaderData() as { res: Promise<SearchResult> };
+  const goto = useNavigate();
   return (
     <section className="p-8 bg-sky-100 min-h-screen">
       <Header />
-      {listings.length > 0 ? (
-        <DataViewer listings={listings} />
-      ) : (
-        <h3 className="text-center mt-8 text-xl grid gap-3">
-          No results found
-          <i className="pi pi-cloud text-2xl"></i>
-        </h3>
-      )}
+      <AsyncUI promise={res} refetch={() => goto("/search")}>
+        {({ listings, pagination }) => {
+          if (listings.length === 0) {
+            return (
+              <h3 className="text-center mt-8 text-xl grid gap-3">
+                No results found
+                <i className="pi pi-cloud text-2xl"></i>
+              </h3>
+            );
+          } else {
+            return (
+              <section
+                ref={(node) => node?.scrollIntoView({ behavior: "smooth" })}>
+                <DataViewer listings={listings} />
+                <Pagination links={pagination} />
+              </section>
+            );
+          }
+        }}
+      </AsyncUI>
     </section>
   );
 };
 
 const loader: LoaderFunction = async ({ request }) => {
   const searchParams = new URL(request.url).searchParams;
-
-  const results = await apiclient.get(`search?${searchParams}`).json();
-  return results as Listing[];
+  const searchPromise = api.search(searchParams);
+  return defer({ res: searchPromise });
 };
 
 SearchPage.loader = loader;

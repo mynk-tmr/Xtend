@@ -34,7 +34,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
         <img
           src={listing.images[0]}
           alt={`photo of ${listing.name}`}
-          className="h-full"
+          className="h-40 w-full object-cover rounded-t-md"
         />
         <Tag
           className="absolute top-0 bg-grass"
@@ -48,7 +48,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
       <article className="p-4 grid gap-3">
         <div>
           <h3 className="text-xl">{listing.name}</h3>
-          <p className="text-sm">{listing.description}</p>
+          <p className="text-sm">{listing.description.slice(0, 40) + "..."}</p>
         </div>
         <p className="text-sm">
           <i className="pi pi-map-marker text-[12px] mr-2"></i>
@@ -56,7 +56,7 @@ const ListingCard = ({ listing }: { listing: Listing }) => {
         </p>
         <div className="*:bg-stone-700 flex flex-wrap gap-2">
           <Tag value={listing.facilities[0]} />
-          <Tag value={listing.facilities[1]} />
+          {listing.facilities[1] && <Tag value={listing.facilities[1]} />}
           {listing.facilities[2] && (
             <Tag value={"+ " + (listing.facilities.length - 2) + " more"} />
           )}

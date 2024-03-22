@@ -4,7 +4,7 @@ import {
   signInAction,
   updateUserInfoAction,
 } from "@/features/auth";
-import { BookingsPage } from "@/features/booking";
+import { UserBookingsPage, RequestBookingPage } from "@/features/booking";
 import { Dashboard, EditListing, ListingTable } from "@/features/dashboard";
 import { HomePage } from "@/features/home";
 import { FormContainer, addListAction } from "@/features/listform";
@@ -18,6 +18,7 @@ import {
 } from "react-router-dom";
 import { PageNotFound } from "./404";
 import { AuthRequired } from "./AuthRequired";
+import { listingloader } from "@/common/loaders/listingloader";
 
 const Router = () => {
   const router = createBrowserRouter(
@@ -32,6 +33,12 @@ const Router = () => {
           path="/search"
           element={<SearchPage />}
           loader={SearchPage.loader}
+        />
+        <Route
+          path="/book/:id"
+          element={<RequestBookingPage />}
+          loader={listingloader}
+          action={RequestBookingPage.action}
         />
         <Route path="*" element={<PageNotFound />} />
         <Route element={<AuthRequired />}>
@@ -50,10 +57,10 @@ const Router = () => {
             <Route
               path="edit/:id"
               element={<EditListing />}
-              loader={EditListing.loader}
+              loader={listingloader}
               action={addListAction}
             />
-            <Route path="bookings" element={<BookingsPage />} />
+            <Route path="bookings" element={<UserBookingsPage />} />
           </Route>
         </Route>
       </Route>

@@ -36,27 +36,18 @@ const AsideMenu = () => {
   );
 };
 
-const PlanDisplayCard = () => (
-  <article className="bg-neutral p-2 rounded-md">
-    <h1 className="text-center font-semibold mb-2">
-      Free Plan <i className="pi pi-gift"></i>
-    </h1>
-    <ul className="grid grid-cols-2 gap-2 text-sm">
-      <li>
-        <b>8</b> Listings
-      </li>
-      <li>
-        <b>2</b> remaining
-      </li>
-      <li>
-        <b>2</b> Boosted
-      </li>
-      <li>
-        <b>0</b> Boosts Left
-      </li>
-    </ul>
-  </article>
-);
+const PlanDisplayCard = () => {
+  return (
+    <article className="bg-neutral p-2 rounded-md w-full">
+      <h1 className="text-center font-semibold mb-2">
+        Free Plan <i className="pi pi-gift"></i>
+      </h1>
+      <p className="text-sm text-center font-bold">
+        ∞ listings <br />∞ bookings
+      </p>
+    </article>
+  );
+};
 
 export const Aside = ({ user }: { user: User }) => (
   <aside className="bg-white sticky top-8 h-screen">
@@ -65,7 +56,7 @@ export const Aside = ({ user }: { user: User }) => (
         shape="circle"
         className="size-16 ring ring-navy mb-4"
         image={user.avatar}
-        label={user.fullname[0]}
+        label={user.fullname}
       />
       <b className=" text-navy mb-4">{user?.fullname}</b>
       <PlanDisplayCard />
