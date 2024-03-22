@@ -4,7 +4,6 @@ import { User as UserType } from "@/types/user";
 
 const requiredString = { type: String, required: true };
 const uniqueString = { ...requiredString, unique: true };
-const requiredDate = { type: Date, required: true };
 
 interface U extends Omit<UserType, "joined"> {
   joined: Date;
@@ -13,9 +12,9 @@ interface U extends Omit<UserType, "joined"> {
 const userSchema = new mongoose.Schema<U>({
   email: uniqueString,
   password: requiredString,
-  fullname: { type: String },
+  fullname: requiredString,
   avatar: { type: String },
-  joined: requiredDate,
+  joined: { type: Date, default: Date.now() },
 });
 
 userSchema.pre("save", async function () {

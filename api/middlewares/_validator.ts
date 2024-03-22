@@ -1,9 +1,16 @@
 import { validationResult, body } from "express-validator";
-import { Request } from "express";
+import { Request, Response, NextFunction } from "express";
 
-export function getValidationErrors(request: Request) {
+export function rejectOnValidationErrors(
+  request: Request,
+  res: Response,
+  next: NextFunction
+) {
   const errors = validationResult(request).array();
-  return errors.length === 0 ? null : errors.map(({ msg }) => msg);
+  const errorMessages =
+    errors.length === 0 ? null : errors.map(({ msg }) => msg);
+  if (errorMessages) return res.status(400).send(errorMessages);
+  else next();
 }
 
 export const validateLogin = [
@@ -11,9 +18,19 @@ export const validateLogin = [
   body("password", "invalid password").isLength({ min: 8 }),
 ];
 
+export const validateRegister = [
+  body("email", "invalid email").isEmail(),
+  body("password", "invalid password").isLength({ min: 8 }),
+  body("fullname", "invalid fullname")
+    .isLength({ min: 3 })
+    .matches(/^[a-z ]*$/i),
+];
+
 export const validateUpdate = [
   body("email", "invalid email").isEmail(),
-  body("fullname", "invalid fullname").matches(/^[a-zA-Z\s]*$/i),
+  body("fullname", "invalid fullname")
+    .isLength({ min: 3 })
+    .matches(/^[a-z ]*$/i),
 ];
 
 export const validateListing = [

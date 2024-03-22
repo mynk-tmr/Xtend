@@ -1,27 +1,42 @@
+import { AsyncUI } from "@/common/components/AsyncUI";
+import { XtendedLogo } from "@/common/components/XtendedLogo";
 import { apiclient } from "@/lib/apiclient";
+import { useAppContext } from "@/providers/AppContextProvider";
 import { Listing } from "@/types/listing";
 import { HTTPError } from "ky";
 import { Button } from "primereact/button";
+import { Calendar } from "primereact/calendar";
 import { Galleria } from "primereact/galleria";
+import { Image } from "primereact/image";
+import { Rating } from "primereact/rating";
 import { Tag } from "primereact/tag";
+import { Nullable } from "primereact/ts-helpers";
+import { useState } from "react";
 import {
   ActionFunction,
   Form,
   Link,
+  LoaderFunction,
+  defer,
   redirect,
   useLoaderData,
 } from "react-router-dom";
-import { useState } from "react";
-import { Calendar } from "primereact/calendar";
-import { Nullable } from "primereact/ts-helpers";
-import { Rating } from "primereact/rating";
-import { XtendedLogo } from "@/common/components/XtendedLogo";
-import { Image } from "primereact/image";
-import { useAppContext } from "@/providers/AppContextProvider";
-import { AsyncUI } from "@/common/components/AsyncUI";
 
 const RequestForm = () => {
   const [dates, setDates] = useState<Nullable<(Date | null)[]>>(null);
+  const { user } = useAppContext();
+  if (!user) {
+    return (
+      <Link to="/auth/login">
+        <Button
+          label="Login to Book"
+          icon="pi pi-shopping-cart"
+          className="bg-love"
+        />
+      </Link>
+    );
+  }
+  const isDisabled = !dates?.[0] || !dates?.[1];
   return (
     <Form method="post" className="[&_label]:font-bold [&_input]:py-1 m-8">
       <label htmlFor="dates" className="text-sm block mb-1 text-white">
@@ -42,8 +57,8 @@ const RequestForm = () => {
           dateFormat="dd/mm/yy"
         />
         <Button
-          disabled={!dates?.[0] || !dates?.[1]}
-          label="Request Booking"
+          disabled={isDisabled}
+          label={isDisabled ? "Select Dates" : "Book Now"}
           icon="pi pi-shopping-cart"
           className="bg-love"
         />
@@ -165,6 +180,11 @@ const BookingInfo = ({ listing }: { listing: Listing }) => {
   );
 };
 
+const loader: LoaderFunction = async ({ params }) => {
+  const listingPromise = apiclient.get(`search/${params.id}`).json();
+  return defer({ listing: listingPromise });
+};
+
 const action: ActionFunction = async ({ params, request }) => {
   try {
     const form = await request.formData();
@@ -182,3 +202,4 @@ const action: ActionFunction = async ({ params, request }) => {
 };
 
 RequestBookingPage.action = action;
+RequestBookingPage.loader = loader;

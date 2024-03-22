@@ -1,33 +1,29 @@
 import { User } from "../models/_user.js";
 import setJWTCookieInResponse from "../middlewares/_jwt.js";
-import { getValidationErrors } from "../middlewares/_validator.js";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { uploadFile } from "../middlewares/_cloudinary.js";
 
 export async function loginUser(req: Request, res: Response) {
   try {
-    const errors = getValidationErrors(req);
-    if (errors) {
-      return res.status(400).send(errors);
-    }
-
     const { email, password } = req.body;
-    let user = await User.findOne({ email });
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password)))
+      return res.status(401).send("Invalid credentials");
+    await user.save();
+    setJWTCookieInResponse(res, user.id).json(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
 
-    if (user && !(await bcrypt.compare(password, user.password))) {
-      res.status(401).send("Invalid credentials");
-      return;
-    } else if (!user) {
-      user = new User({
-        email: req.body.email,
-        fullname: "Guest",
-        password: req.body.password,
-        joined: new Date(),
-      });
-      await user.save();
-    }
-
+export async function registerUser(req: Request, res: Response) {
+  try {
+    let user = await User.findOne({ email: req.body.email });
+    if (user) return res.sendStatus(409);
+    user = new User(req.body);
+    await user.save();
     setJWTCookieInResponse(res, user.id).json(user);
   } catch (error) {
     console.log(error);
@@ -42,10 +38,6 @@ export async function logoutUser(req: Request, res: Response) {
 
 export async function updateUser(req: Request, res: Response) {
   try {
-    const errors = getValidationErrors(req);
-    if (errors) {
-      return res.status(400).send(errors);
-    }
     for (const key in req.body) if (!req.body[key]) delete req.body[key];
     const user = await User.findByIdAndUpdate(req.userId, req.body, {
       new: true,

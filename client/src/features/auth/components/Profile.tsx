@@ -42,6 +42,8 @@ export const Profile = () => {
   );
 };
 
+Profile.action = EditProfileForm.action;
+
 const UserAvatarAndInfo = ({ editEnabled }: { editEnabled: boolean }) => {
   const { user } = useAppContext();
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar || "");

@@ -2,6 +2,8 @@ import { AsyncUI } from "@/common/components/AsyncUI";
 import { Listing } from "@/types/listing";
 import { FormContainer } from "@/features/listform";
 import { useLoaderData } from "react-router-dom";
+import { apiclient } from "@/lib/apiclient";
+import { LoaderFunction, defer } from "react-router-dom";
 
 export const EditListing = () => {
   const { listing } = useLoaderData() as { listing: Promise<Listing> };
@@ -15,3 +17,10 @@ export const EditListing = () => {
     </section>
   );
 };
+
+const loader: LoaderFunction = async ({ params }) => {
+  const listingPromise = apiclient.get(`listings/${params.id}`).json();
+  return defer({ listing: listingPromise });
+};
+
+EditListing.loader = loader;

@@ -56,7 +56,7 @@ export const Aside = ({ user }: { user: User }) => (
         shape="circle"
         className="size-16 ring ring-navy mb-4"
         image={user.avatar}
-        label={user.fullname}
+        label={user.fullname[0]}
       />
       <b className=" text-navy mb-4">{user?.fullname}</b>
       <PlanDisplayCard />

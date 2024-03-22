@@ -1,8 +1,8 @@
 import {
   AuthPage,
+  LoginForm,
   Profile,
-  signInAction,
-  updateUserInfoAction,
+  RegistrationForm,
 } from "@/features/auth";
 import { UserBookingsPage, RequestBookingPage } from "@/features/booking";
 import { Dashboard, EditListing, ListingTable } from "@/features/dashboard";
@@ -18,16 +18,24 @@ import {
 } from "react-router-dom";
 import { PageNotFound } from "./404";
 import { AuthRequired } from "./AuthRequired";
-import { listingloader } from "@/common/loaders/listingloader";
 
 const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromChildren(
       <Route path="/">
         <Route index element={<HomePage />} />
-        <Route path="/auth">
-          <Route index element={<AuthPage />} action={signInAction} />
-          <Route path="*" element={<Navigate to="/auth" replace />} />
+        <Route path="/auth" element={<AuthPage />}>
+          <Route index element={<Navigate to="login" />} />
+          <Route
+            path="register"
+            element={<RegistrationForm />}
+            action={RegistrationForm.action}
+          />
+          <Route
+            path="login"
+            element={<LoginForm />}
+            action={LoginForm.action}
+          />
         </Route>
         <Route
           path="/search"
@@ -37,7 +45,7 @@ const Router = () => {
         <Route
           path="/book/:id"
           element={<RequestBookingPage />}
-          loader={listingloader}
+          loader={RequestBookingPage.loader}
           action={RequestBookingPage.action}
         />
         <Route path="*" element={<PageNotFound />} />
@@ -52,15 +60,19 @@ const Router = () => {
             <Route
               path="profile"
               element={<Profile />}
-              action={updateUserInfoAction}
+              action={Profile.action}
             />
             <Route
               path="edit/:id"
               element={<EditListing />}
-              loader={listingloader}
+              loader={EditListing.loader}
               action={addListAction}
             />
-            <Route path="bookings" element={<UserBookingsPage />} />
+            <Route
+              path="bookings"
+              element={<UserBookingsPage />}
+              loader={UserBookingsPage.loader}
+            />
           </Route>
         </Route>
       </Route>

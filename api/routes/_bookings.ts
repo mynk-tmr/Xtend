@@ -1,5 +1,8 @@
 import express from "express";
-import { validateBooking } from "../middlewares/_validator.js";
+import {
+  rejectOnValidationErrors,
+  validateBooking,
+} from "../middlewares/_validator.js";
 import { verifyToken } from "../middlewares/_verifyToken.js";
 import * as bookingController from "../controllers/_bookingController.js";
 
@@ -8,6 +11,7 @@ router.post(
   "/request/:id",
   verifyToken,
   validateBooking,
+  rejectOnValidationErrors,
   bookingController.requestBooking
 );
 router.post("/confirm/:id", verifyToken, bookingController.confirmBooking);

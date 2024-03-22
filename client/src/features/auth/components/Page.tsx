@@ -1,6 +1,5 @@
-import { LoginForm } from "./LoginForm";
 import { useAppContext } from "@/providers/AppContextProvider";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export const Page = () => {
   const { user, isVerifying } = useAppContext();
@@ -15,5 +14,5 @@ export const Page = () => {
   if (user && state?.to)
     return <Navigate to={state.to} state={state} replace />;
   if (user) return <Navigate to="/dashboard/profile" replace />;
-  return <LoginForm />;
+  return <Outlet />;
 };

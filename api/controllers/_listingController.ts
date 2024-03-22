@@ -1,15 +1,10 @@
 import { uploadFiles } from "../middlewares/_cloudinary.js";
 import { Listing } from "../models/_listing.js";
-import { getValidationErrors } from "../middlewares/_validator.js";
 import { Request, Response } from "express";
 import { Booking } from "../models/_booking.js";
 import q2m from "query-to-mongo";
 
 export async function addList(req: Request, res: Response) {
-  const errors = getValidationErrors(req);
-  if (errors) {
-    return res.status(400).send(errors);
-  }
   try {
     const list = req.body;
     list.facilities = [list.facilities].flat(Infinity);
@@ -27,10 +22,6 @@ export async function addList(req: Request, res: Response) {
 }
 
 export async function updateList(req: Request, res: Response) {
-  const errors = getValidationErrors(req);
-  if (errors) {
-    return res.status(400).send(errors);
-  }
   try {
     const oldlist = req.body;
     oldlist.facilities = [oldlist.facilities].flat(Infinity);
