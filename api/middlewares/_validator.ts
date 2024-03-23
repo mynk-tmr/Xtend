@@ -53,6 +53,10 @@ export const validateListing = [
 ];
 
 export const validateBooking = [
-  body("start", "invalid start date").isISO8601(),
-  body("end", "invalid end date").isISO8601(),
+  body("start", "invalid start date").toDate(),
+  body("end", "invalid end date").toDate(),
+];
+
+export const validateBookingConfirmation = [
+  body("status", "invalid status").isIn(["accepted", "rejected"]),
 ];

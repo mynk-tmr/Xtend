@@ -9,9 +9,6 @@
 }
 
 @layer base {
-  :root {
-    scrollbar-gutter: stable both-edges;
-  }
   #root > main {
     @apply min-h-screen;
   }

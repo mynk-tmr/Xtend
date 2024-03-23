@@ -1,6 +1,6 @@
 import { AsyncUI } from "@/common/components/AsyncUI";
 import { Listing } from "@/types/listing";
-import { FormContainer } from "@/features/listform";
+import { FormContainer } from "@/features/listing";
 import { useLoaderData } from "react-router-dom";
 import { apiclient } from "@/lib/apiclient";
 import { LoaderFunction, defer } from "react-router-dom";

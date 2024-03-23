@@ -7,7 +7,7 @@ import {
 import { UserBookingsPage, RequestBookingPage } from "@/features/booking";
 import { Dashboard, EditListing, ListingTable } from "@/features/dashboard";
 import { HomePage } from "@/features/home";
-import { FormContainer, addListAction } from "@/features/listform";
+import { FormContainer, addListAction } from "@/features/listing";
 import { SearchPage } from "@/features/search";
 import {
   Navigate,
@@ -72,6 +72,7 @@ const Router = () => {
               path="bookings"
               element={<UserBookingsPage />}
               loader={UserBookingsPage.loader}
+              action={UserBookingsPage.action}
             />
           </Route>
         </Route>

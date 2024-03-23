@@ -27,6 +27,13 @@ const listingSchema = new mongoose.Schema<L>({
   height: requiredNumber,
   area: requiredNumber,
   lastUpdated: requiredDate,
+  reviews: [
+    {
+      userId: requiredString,
+      rating: requiredNumber,
+      text: { type: String, default: "" },
+    },
+  ],
 });
 
 listingSchema.pre("save", async function () {

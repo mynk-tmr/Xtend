@@ -3,35 +3,27 @@ import { Avatar } from "primereact/avatar";
 import { Link } from "react-router-dom";
 import { User } from "@/types/user";
 
+const links = [
+  ["/dashboard", "My Listings", "pi-key"],
+  ["addlisting", "Add new Listing", "pi-plus"],
+  ["bookings", "My bookings", "pi-heart"],
+  ["customers", "Customers", "pi-users"],
+  ["/search", "Book a Storage", "pi-shopping-cart"],
+  ["profile", "Profile", "pi-cog"],
+];
+
 const AsideMenu = () => {
   const { pathname: pt } = useLocation();
   return (
     <nav className="grid gap-5 py-6 text-sm items-center [&_i]:align-middle  hover:*:text-ink [&_i]:mr-5">
-      <Link
-        to="/dashboard"
-        className={pt.match(/\/dashboard\/?$/) ? "text-blood" : ""}>
-        <i className="pi pi-key"></i> My Listings
-      </Link>
-      <Link
-        to="addlisting"
-        className={pt.match(/\/addlisting\/?$/) ? "text-blood" : ""}>
-        <i className="pi pi-plus"></i> Add new Listing
-      </Link>
-      <Link
-        to="bookings"
-        className={pt.match(/\/bookings\/?$/) ? "text-blood" : ""}>
-        <i className="pi pi-heart"></i> My bookings
-      </Link>
-      <Link
-        to="/search"
-        className={pt.match(/\/search\/?$/) ? "text-blood" : ""}>
-        <i className="pi pi-shopping-cart"></i> Book a Storage
-      </Link>
-      <Link
-        to="profile"
-        className={pt.match(/\/profile\/?$/) ? "text-blood" : ""}>
-        <i className="pi pi-user"></i> My Profile
-      </Link>
+      {links.map(([path, label, icon]) => (
+        <Link
+          key={path}
+          to={path}
+          className={pt.endsWith(path) ? "text-blood" : ""}>
+          <i className={`pi ${icon}`}></i> {label}
+        </Link>
+      ))}
     </nav>
   );
 };

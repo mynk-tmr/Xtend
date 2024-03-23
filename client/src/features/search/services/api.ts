@@ -1,8 +1,6 @@
 import { apiclient } from "@/lib/apiclient";
 import { Listing } from "@/types/listing";
 
-const prefix = "search?";
-
 export type SearchResult = {
   listings: Listing[];
   pagination: undefined | Record<string, string>;
@@ -10,7 +8,7 @@ export type SearchResult = {
 
 export const api = {
   search: async (searchParams: URLSearchParams) => {
-    const res = await apiclient.get(prefix + searchParams);
+    const res = await apiclient.get("search?" + searchParams);
     const links = res.headers.get("Link");
     let pagination;
 
@@ -29,5 +27,8 @@ export const api = {
       listings: await res.json(),
       pagination,
     };
+  },
+  getListing: async (id: string) => {
+    return await apiclient.get(`search/${id}`).json();
   },
 };

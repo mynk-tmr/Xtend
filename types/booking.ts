@@ -1,12 +1,12 @@
+import { Listing } from "./listing";
+
 export type Booking = {
+  _id: string;
   userId: string;
   listingId: string;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   price: number;
-  status: "pending" | "accepted" | "rejected";
-  review: {
-    rating: number;
-    text: string;
-  };
+  status: "pending" | "accepted" | "rejected" | "canceled";
+  listing: Listing;
 };

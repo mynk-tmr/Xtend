@@ -17,4 +17,11 @@ export type Listing = {
   height: number;
   area: number;
   lastUpdated: string;
+  reviews?: [
+    {
+      userId: string;
+      rating: number;
+      text: string;
+    }
+  ];
 };

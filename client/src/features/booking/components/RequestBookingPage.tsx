@@ -1,99 +1,24 @@
 import { AsyncUI } from "@/common/components/AsyncUI";
 import { XtendedLogo } from "@/common/components/XtendedLogo";
-import { apiclient } from "@/lib/apiclient";
-import { useAppContext } from "@/providers/AppContextProvider";
 import { Listing } from "@/types/listing";
 import { HTTPError } from "ky";
-import { Button } from "primereact/button";
-import { Calendar } from "primereact/calendar";
-import { Galleria } from "primereact/galleria";
-import { Image } from "primereact/image";
-import { Rating } from "primereact/rating";
-import { Tag } from "primereact/tag";
-import { Nullable } from "primereact/ts-helpers";
-import { useState } from "react";
 import {
   ActionFunction,
-  Form,
-  Link,
   LoaderFunction,
   defer,
   redirect,
   useLoaderData,
 } from "react-router-dom";
-
-const RequestForm = () => {
-  const [dates, setDates] = useState<Nullable<(Date | null)[]>>(null);
-  const { user } = useAppContext();
-  if (!user) {
-    return (
-      <Link to="/auth/login">
-        <Button
-          label="Login to Book"
-          icon="pi pi-shopping-cart"
-          className="bg-love"
-        />
-      </Link>
-    );
-  }
-  const isDisabled = !dates?.[0] || !dates?.[1];
-  return (
-    <Form method="post" className="[&_label]:font-bold [&_input]:py-1 m-8">
-      <label htmlFor="dates" className="text-sm block mb-1 text-white">
-        Select duration of booking
-      </label>
-      <div className="flex flex-wrap gap-3">
-        <Calendar
-          name="dates"
-          inputId="dates"
-          value={dates}
-          onChange={(e) => setDates(e.value)}
-          selectionMode="range"
-          minDate={new Date()}
-          readOnlyInput
-          icon="pi pi-calendar"
-          showIcon
-          touchUI
-          dateFormat="dd/mm/yy"
-        />
-        <Button
-          disabled={isDisabled}
-          label={isDisabled ? "Select Dates" : "Book Now"}
-          icon="pi pi-shopping-cart"
-          className="bg-love"
-        />
-      </div>
-    </Form>
-  );
-};
-
-const Gallery = ({ listing }: { listing: Listing }) => {
-  return (
-    <Galleria
-      value={listing.images}
-      pt={{
-        previousItemButton: {
-          className: "rounded bg-black/70 size-12 z-20",
-        },
-        nextItemButton: { className: "rounded bg-black/70 size-12 z-20" },
-      }}
-      showItemNavigators
-      showThumbnails={false}
-      item={(url: string) => (
-        <Image
-          key={url}
-          src={url}
-          preview
-          pt={{ image: { className: "h-[375px]" } }}
-        />
-      )}
-    />
-  );
-};
+import { BookingInfo, Gallery, RequestForm } from "./RequestBookingElements";
+import { bookapi } from "../services/bookapi";
+import { Booking } from "@/types/booking";
+import { searchapi } from "@/features/search";
 
 export const RequestBookingPage = () => {
-  const { listing } = useLoaderData() as { listing: Promise<Listing> };
-  const { user } = useAppContext();
+  const { listing, bookings } = useLoaderData() as {
+    listing: Promise<Listing>;
+    bookings: Promise<Booking[]>;
+  };
   return (
     <main className="p-6 min-h-screen">
       <header className="mb-8">
@@ -103,24 +28,18 @@ export const RequestBookingPage = () => {
         </h1>
       </header>
       <section className="grid md:grid-cols-2 bg-[#EFEFEF]">
-        <AsyncUI promise={listing}>
-          {(listing) => (
+        <AsyncUI promise={Promise.all([listing, bookings])}>
+          {([listing, bookings]) => (
             <>
               <section className="grid grid-rows-[375px_auto] items-center bg-gray-800">
                 <Gallery listing={listing} />
-                {user?._id !== listing.userId ? (
-                  <RequestForm />
-                ) : (
-                  <div className="text-white p-3">
-                    <p> This is how it will appear to users...</p>
-                    <Link
-                      className=" bg-success text-black py-1 px-2 mt-4 inline-block"
-                      to={`/dashboard/edit/${listing._id}`}>
-                      <i className="pi pi-pencil mr-2"></i>
-                      You can edit it here
-                    </Link>
-                  </div>
-                )}
+                <RequestForm
+                  listing={listing}
+                  isAlreadyBooked={bookings.some(
+                    (b) =>
+                      b.listingId === listing._id && b.status !== "canceled"
+                  )}
+                />
               </section>
               <BookingInfo listing={listing} />
             </>
@@ -131,73 +50,22 @@ export const RequestBookingPage = () => {
   );
 };
 
-const BookingInfo = ({ listing }: { listing: Listing }) => {
-  return (
-    <section className="grid gap-4 p-8 text-gray-800">
-      <b className="text-sm underline">{listing.name}</b>
-      <div>
-        <b className="text-sm">
-          <i className="pi pi-user mr-2"></i> Comment from Host
-        </b>
-        <p className="text-2xl text-balance">"{listing.description}"</p>
-      </div>
-      <div>
-        <b className="text-sm">Rated</b>
-        <Rating value={listing.rating} readOnly cancel={false} />
-      </div>
-      <p>
-        <b className="text-sm block mb-2">
-          <i className="pi pi-home mr-2"></i> Dimensions (in feet)
-        </b>
-        <span className="flex flex-wrap gap-3 *:bg-blood">
-          <Tag value={"Area: " + listing.area + " sq."} />
-          <Tag value={"Entrance Height: " + listing.height} />
-          <Tag value={"Entrance Width: " + listing.width} />
-        </span>
-      </p>
-      <p className="text-sm block mb-2 font-bold">
-        <i className="pi pi-tag mr-2"></i> Category
-        <Tag className="ml-3 text-base" value={listing.category} />
-      </p>
-      <p className="flex flex-wrap gap-2">
-        <b>
-          <i className="pi pi-heart-fill"></i> Facilities
-        </b>
-        {listing.facilities?.map((f) => (
-          <Tag key={f} value={f} className="bg-stone-700"></Tag>
-        ))}
-      </p>
-      <p className="mt-6">
-        <b className="text-2xl bg-grass p-3 text-white rounded-md">
-          <i className="pi pi-wallet"></i> ₹ {listing.price - listing.discount}{" "}
-          / day
-        </b>
-        <small className="ml-4">
-          Discounted: <b className="text-blood">₹ {listing.discount}</b>
-        </small>
-      </p>
-    </section>
-  );
-};
-
 const loader: LoaderFunction = async ({ params }) => {
-  const listingPromise = apiclient.get(`search/${params.id}`).json();
-  return defer({ listing: listingPromise });
+  if (!params.id) return redirect("/search");
+  const listingPromise = searchapi.getListing(params.id);
+  const bookingPromise = bookapi.getall();
+  return defer({ listing: listingPromise, bookings: bookingPromise });
 };
 
 const action: ActionFunction = async ({ params, request }) => {
   try {
-    const form = await request.formData();
     if (!params.id) return redirect("/search");
-    await apiclient.post(`bookings/request/${params.id}`, {
-      body: form,
-    });
+    const form = await request.formData();
+    await bookapi.request(form, params.id);
     return { ok: true };
   } catch (err) {
     if (err instanceof HTTPError)
-      if (err.response.status == 500)
-        return { ok: false, error: "Couldn't request booking" };
-    return redirect("/search");
+      return { ok: false, error: "Couldn't request booking" };
   }
 };
 

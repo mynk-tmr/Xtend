@@ -1,7 +1,7 @@
 import { SearchFields } from "../types/searchfields";
 import { useForm } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
-import { categories, facilities } from "@/features/listform";
+import { categories, facilities } from "@/features/listing";
 import { Button } from "primereact/button";
 import { Form, useNavigation, useSearchParams } from "react-router-dom";
 
