@@ -19,36 +19,39 @@ import {
 import { PageNotFound } from "./404";
 import { AuthRequired } from "./AuthRequired";
 import { CustomersPage } from "@/features/customers";
+import { Navbar } from "@/features/navbar";
 
 const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromChildren(
       <Route path="/">
-        <Route index element={<HomePage />} />
-        <Route path="/auth" element={<AuthPage />}>
-          <Route index element={<Navigate to="login" />} />
+        <Route element={<Navbar />}>
+          <Route index element={<HomePage />} />
+          <Route path="/auth" element={<AuthPage />}>
+            <Route index element={<Navigate to="login" />} />
+            <Route
+              path="register"
+              element={<RegistrationForm />}
+              action={RegistrationForm.action}
+            />
+            <Route
+              path="login"
+              element={<LoginForm />}
+              action={LoginForm.action}
+            />
+          </Route>
           <Route
-            path="register"
-            element={<RegistrationForm />}
-            action={RegistrationForm.action}
+            path="/search"
+            element={<SearchPage />}
+            loader={SearchPage.loader}
           />
           <Route
-            path="login"
-            element={<LoginForm />}
-            action={LoginForm.action}
+            path="/book/:id"
+            element={<RequestBookingPage />}
+            loader={RequestBookingPage.loader}
+            action={RequestBookingPage.action}
           />
         </Route>
-        <Route
-          path="/search"
-          element={<SearchPage />}
-          loader={SearchPage.loader}
-        />
-        <Route
-          path="/book/:id"
-          element={<RequestBookingPage />}
-          loader={RequestBookingPage.loader}
-          action={RequestBookingPage.action}
-        />
         <Route path="*" element={<PageNotFound />} />
         <Route element={<AuthRequired />}>
           <Route

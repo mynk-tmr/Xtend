@@ -9,7 +9,7 @@ import bookingRoutes from "./routes/_bookings.js";
 import searchRoutes from "./routes/_search.js";
 
 await mongoose.connect(process.env.MONGO_URI);
-console.log("\n\n\n", "connected to DB");
+console.log("\n\n", "connected to DB");
 
 const app = express();
 app.use(
