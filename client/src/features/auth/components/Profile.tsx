@@ -8,10 +8,11 @@ import { Button } from "primereact/button";
 import { RouteActionData } from "@/types/actions";
 import { useActionData } from "react-router-dom";
 import { useToast } from "@/providers/ToastProvider";
+import { User } from "@/types/user";
 
 export const Profile = () => {
   const [editEnabled, setEditEnabled] = useState(false);
-  const { verifyUser, user } = useAppContext();
+  const { verifyUser } = useAppContext();
   const res = useActionData() as RouteActionData;
   const toast = useToast();
 
@@ -26,22 +27,20 @@ export const Profile = () => {
   return (
     <section
       style={{ fontFamily: "Lato, sans-serif" }}
-      className="grow p-8 grid place-items-center">
-      <h1 className="text-3xl font-bold text-center text-navy">
-        {user?.fullname + "'s Profile"}
-      </h1>
-      <Button
-        label={editEnabled ? "Cancel Edit" : "Edit Profile"}
-        className={`mt-4 w-fit ${editEnabled ? "bg-blood" : "bg-black"}`}
-        icon={editEnabled ? "pi pi-times" : "pi pi-pencil"}
-        rounded
-        onClick={() => setEditEnabled(!editEnabled)}
-      />
-      <UserAvatarAndInfo {...{ editEnabled }} />
+      className="grow p-8 justify-self-center">
+      <header className="mx-auto w-fit">
+        <Button
+          label={editEnabled ? "Cancel Edit" : "Edit Profile"}
+          className={`${editEnabled ? "bg-blood" : "bg-black"}`}
+          icon={editEnabled ? "pi pi-times" : "pi pi-pencil"}
+          rounded
+          onClick={() => setEditEnabled(!editEnabled)}
+        />
+      </header>
+      <UserAvatarAndInfo {...{ editEnabled, setEditEnabled }} />
     </section>
   );
 };
-
 Profile.action = EditProfileForm.action;
 
 const UserAvatarAndInfo = ({ editEnabled }: { editEnabled: boolean }) => {
@@ -49,38 +48,35 @@ const UserAvatarAndInfo = ({ editEnabled }: { editEnabled: boolean }) => {
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar || "");
   const uploadFileInputRef = useRef<HTMLInputElement>(null);
   return (
-    <>
-      <div className="relative">
-        <Avatar
-          image={avatarUrl}
-          label={user?.fullname[0]}
-          shape="circle"
-          className={`size-48 m-8 p-overlay-badge ${
-            editEnabled ? "ring-4 ring-ink" : ""
-          }`}
-          onClick={() => uploadFileInputRef.current?.click()}></Avatar>
-      </div>
+    <section className="flex flex-wrap gap-x-10 place-items-center">
+      <Avatar
+        image={avatarUrl}
+        label={user?.fullname[0]}
+        shape="circle"
+        className={`size-48 m-8 p-overlay-badge mx-auto ${
+          editEnabled ? "ring-4 ring-ink" : ""
+        }`}
+        onClick={() => uploadFileInputRef.current?.click()}></Avatar>
       {editEnabled ? (
         <EditProfileForm {...{ uploadFileInputRef, setAvatarUrl }} />
       ) : (
         <UserInfoSection />
       )}
-    </>
+    </section>
   );
 };
 
 const UserInfoSection = () => {
-  const { user } = useAppContext();
+  const { user } = useAppContext() as { user: User };
   return (
-    <section className="grid grid-cols-2 gap-3 p-3 bg-neutral">
-      <b>Full Name :</b>{" "}
-      <b className="text-blood">{user?.fullname || "Not Available"}</b>
-      <b>Email :</b> <b className="text-grass">{user?.email}</b>
-      <b>Member since :</b>{" "}
-      <b className="text-navy">{isoToLocale(user?.joined || "")}</b>
-      <div className="col-span-2 mt-4">
-        <LogOut />
-      </div>
-    </section>
+    <article className="grid grid-cols-2">
+      <span>Full Name</span>
+      <b>{user.fullname}</b>
+      <span>Email</span>
+      <b>{user.email}</b>
+      <span>Joined</span>
+      <b className="mb-6">{isoToLocale(user.joined)}</b>
+      <LogOut />
+    </article>
   );
 };

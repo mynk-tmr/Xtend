@@ -18,6 +18,7 @@ import {
 } from "react-router-dom";
 import { PageNotFound } from "./404";
 import { AuthRequired } from "./AuthRequired";
+import { CustomersPage } from "@/features/customers";
 
 const Router = () => {
   const router = createBrowserRouter(
@@ -50,7 +51,10 @@ const Router = () => {
         />
         <Route path="*" element={<PageNotFound />} />
         <Route element={<AuthRequired />}>
-          <Route path="/dashboard" element={<Dashboard />}>
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+            loader={Dashboard.loader}>
             <Route index element={<ListingTable />} />
             <Route
               path="addlisting"
@@ -73,6 +77,12 @@ const Router = () => {
               element={<UserBookingsPage />}
               loader={UserBookingsPage.loader}
               action={UserBookingsPage.action}
+            />
+            <Route
+              path="customers"
+              element={<CustomersPage />}
+              loader={CustomersPage.loader}
+              action={CustomersPage.action}
             />
           </Route>
         </Route>

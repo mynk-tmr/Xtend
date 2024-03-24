@@ -60,3 +60,7 @@ export const validateBooking = [
 export const validateBookingConfirmation = [
   body("status", "invalid status").isIn(["accepted", "rejected"]),
 ];
+
+export const validateBookingCancellation = [
+  body("status", "invalid status").isIn(["canceled"]),
+];

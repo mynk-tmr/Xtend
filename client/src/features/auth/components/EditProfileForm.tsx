@@ -31,7 +31,7 @@ export const EditProfileForm = (props: EditProfileFormType) => {
     <Form
       method="post"
       encType="multipart/form-data"
-      className="[&_input]:py-2 space-y-4 grid sm:grid-cols-2 sm:items-center">
+      className="[&_input]:py-2 grid grid-cols-2 gap-3">
       <input
         type="file"
         name="avatar"

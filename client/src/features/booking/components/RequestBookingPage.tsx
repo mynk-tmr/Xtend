@@ -8,13 +8,17 @@ import {
   defer,
   redirect,
   useLoaderData,
+  useNavigate,
 } from "react-router-dom";
 import { BookingInfo, Gallery, RequestForm } from "./RequestBookingElements";
 import { bookapi } from "../services/bookapi";
 import { Booking } from "@/types/booking";
 import { searchapi } from "@/features/search";
+import { useSubmissionEffect } from "@/hooks/useSubmissionEffect";
 
 export const RequestBookingPage = () => {
+  const goto = useNavigate();
+  useSubmissionEffect(() => goto("/dashboard/bookings"), "Booking created");
   const { listing, bookings } = useLoaderData() as {
     listing: Promise<Listing>;
     bookings: Promise<Booking[]>;

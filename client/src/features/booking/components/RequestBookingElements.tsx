@@ -9,7 +9,6 @@ import { Nullable } from "primereact/ts-helpers";
 import { useState } from "react";
 import { Link, Form } from "react-router-dom";
 import { Image } from "primereact/image";
-import { useSubmissionEffect } from "../hooks/useSubmissionEffect";
 
 export const BookingInfo = ({ listing }: { listing: Listing }) => {
   return (
@@ -69,7 +68,6 @@ export const RequestForm = ({
 }) => {
   const [dates, setDates] = useState<Nullable<(Date | null)[]>>(null);
   const { user } = useAppContext();
-  useSubmissionEffect();
   if (!user) {
     return (
       <Link to="/auth/login">

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Booking } from "../models/_booking.js";
 import { Listing } from "../models/_listing.js";
+import { User } from "../models/_user.js";
 
 export async function getAllBookings(req: Request, res: Response) {
   const bookings = await Booking.find({
@@ -51,7 +52,7 @@ export async function requestBooking(req: Request, res: Response) {
   return res.status(201).send(booking);
 }
 
-export async function confirmBooking(req: Request, res: Response) {
+export async function setBookingStatus(req: Request, res: Response) {
   const booking = await Booking.findOneAndUpdate(
     {
       _id: req.params.id,
@@ -67,18 +68,31 @@ export async function confirmBooking(req: Request, res: Response) {
   return res.status(200).send(booking);
 }
 
-export async function cancelBooking(req: Request, res: Response) {
-  const booking = await Booking.findOneAndUpdate(
-    {
-      _id: req.params.id,
-    },
-    {
-      status: "canceled",
-    },
-    {
-      new: true,
-    }
-  );
-  if (!booking) return res.sendStatus(404);
-  return res.status(200).send(booking);
+export async function getCustomers(req: Request, res: Response) {
+  const listings = await Listing.find({
+    userId: req.userId,
+  });
+  const bookings = await Booking.find({
+    listingId: { $in: listings.map((l) => l._id) },
+    status: "pending",
+  }).lean();
+
+  const promises = bookings.map(async (b) => ({
+    booking: b,
+    user: await User.findById(b.userId).select("fullname avatar"),
+  }));
+
+  const customers = await Promise.all(promises);
+  return res.status(200).send(customers);
+}
+
+export async function newCustomers(req: Request, res: Response) {
+  const listings = await Listing.find({
+    userId: req.userId,
+  });
+  const count = await Booking.countDocuments({
+    listingId: { $in: listings.map((l) => l._id) },
+    status: "pending",
+  });
+  return res.json({ count: count });
 }

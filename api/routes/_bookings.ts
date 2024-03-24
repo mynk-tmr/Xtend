@@ -2,6 +2,7 @@ import express from "express";
 import {
   rejectOnValidationErrors,
   validateBooking,
+  validateBookingCancellation,
   validateBookingConfirmation,
 } from "../middlewares/_validator.js";
 import { verifyToken } from "../middlewares/_verifyToken.js";
@@ -20,10 +21,18 @@ router.post(
   verifyToken,
   validateBookingConfirmation,
   rejectOnValidationErrors,
-  bookingController.confirmBooking
+  bookingController.setBookingStatus
+);
+router.post(
+  "/cancel/:id",
+  verifyToken,
+  validateBookingCancellation,
+  rejectOnValidationErrors,
+  bookingController.setBookingStatus
 );
 router.get("/all", verifyToken, bookingController.getAllBookings);
 router.get("/all/:id", verifyToken, bookingController.getOneBooking);
-router.post("/cancel/:id", verifyToken, bookingController.cancelBooking);
+router.get("/customers", verifyToken, bookingController.getCustomers);
+router.get("/customers/new", verifyToken, bookingController.newCustomers);
 
 export default router;

@@ -5,11 +5,13 @@ import { Form, useNavigation } from "react-router-dom";
 import logosrc from "@/common/assets/logo.png";
 import { SVGCloudBackground } from "@/common/components/SVGCloudBackground";
 import { Password } from "primereact/password";
-import { useSubmissionEffect } from "../hooks/useSubmissionEffect";
+import { useSubmissionEffect } from "../../../hooks/useSubmissionEffect";
 import { Checkbox } from "primereact/checkbox";
+import { useAppContext } from "@/providers/AppContextProvider";
 
 export const FormContainer = ({ children }: { children: React.ReactNode }) => {
-  useSubmissionEffect();
+  const { verifyUser } = useAppContext();
+  useSubmissionEffect(verifyUser, "");
   return (
     <>
       <Fieldset

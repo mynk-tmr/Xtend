@@ -17,7 +17,11 @@ export const bookapi = {
     });
   },
   cancel: async (id: string) => {
-    return await apiclient.post(prefix + `cancel/${id}`);
+    return await apiclient.post(prefix + `cancel/${id}`, {
+      json: {
+        status: "canceled",
+      },
+    });
   },
   confirm: async (id: string, status: string) => {
     return await apiclient.post(prefix + `confirm/${id}`, {
@@ -25,5 +29,11 @@ export const bookapi = {
         status,
       },
     });
+  },
+  getcustomers: async () => {
+    return await apiclient.get(prefix + "customers").json();
+  },
+  newcustomers: async () => {
+    return await apiclient.get(prefix + "customers/new").json();
   },
 };

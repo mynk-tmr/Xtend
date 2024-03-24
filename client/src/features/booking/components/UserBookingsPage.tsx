@@ -6,6 +6,7 @@ import {
   LoaderFunction,
   defer,
   useLoaderData,
+  useNavigation,
 } from "react-router-dom";
 import { isoToLocale } from "@/lib/intl";
 import { Tag } from "primereact/tag";
@@ -23,7 +24,7 @@ export const UserBookingsPage = () => {
       {(res) => {
         if (!res || !res.length) {
           return (
-            <section className="grid place-items-center">
+            <section className="grid place-items-center gap-3">
               <h1 className="text-xl">You do not have any Bookings ...</h1>
               <i className="pi pi-shopping-cart text-5xl" />
               <p className="text-ink font-semibold animate-pulse">
@@ -34,9 +35,10 @@ export const UserBookingsPage = () => {
         }
 
         return (
-          <section className="flex flex-wrap">
-            <h1 className="text-3xl font-bold text-navy basis-full">
-              My Bookings
+          <section className="flex flex-wrap justify-center">
+            <h1 className="*:text-3xl text-center basis-full">
+              <b>Bookings </b>
+              <i className="ml-3 pi pi-shopping-cart"></i>
             </h1>
             {res.map((booking: Booking, i) => (
               <BookingCard key={i} booking={booking} />
@@ -62,7 +64,7 @@ const Status = ({ status }: { status: Booking["status"] }) => {
       break;
     }
     case "accepted": {
-      statusStyle = "bg-success";
+      statusStyle = "bg-success text-black";
       statusText = (
         <span>
           <i className="pi pi-check align-middle"></i> Accepted
@@ -71,7 +73,7 @@ const Status = ({ status }: { status: Booking["status"] }) => {
       break;
     }
     case "rejected": {
-      statusStyle = "bg-blood";
+      statusStyle = "bg-black";
       statusText = (
         <span>
           <i className="pi pi-times align-middle"></i> Rejected
@@ -80,7 +82,7 @@ const Status = ({ status }: { status: Booking["status"] }) => {
       break;
     }
     case "canceled": {
-      statusStyle = "bg-yellow";
+      statusStyle = "bg-yellow text-black";
       statusText = (
         <span>
           <i className="pi pi-times align-middle"></i> Cancelled
@@ -105,16 +107,22 @@ const BookingCard = ({ booking }: { booking: Booking }) => {
     },
   });
 
+  const { state } = useNavigation();
+
   return (
     <section className="bg-white flex flex-col m-4 rounded-md p-4 shadow-[5px_5px_0px_0px_rgba(109,40,217)] border-l-2 size-80 relative">
       <div className="grow">
         {isFetching ? (
-          <Skeleton className="w-full h-full" />
+          <Skeleton pt={{ root: { className: "!h-[133px]" } }} />
         ) : isError ? (
           <p className="text-blood text-balance">Failed to load listing Info</p>
         ) : (
           <>
-            <img src={listing?.images[0]} alt="listing" className="h-[133px]" />
+            <img
+              src={listing?.images[0]}
+              alt="listing"
+              className="h-[133px] w-full object-cover"
+            />
             <h3 className="text-xl">{listing?.name}</h3>
             <p className="text-sm">
               {listing?.description.slice(0, 40) + "..."}
@@ -133,6 +141,8 @@ const BookingCard = ({ booking }: { booking: Booking }) => {
         {(booking.status === "pending" || booking.status === "accepted") && (
           <Form method="post">
             <Button
+              loading={state === "submitting" || state === "loading"}
+              loadingIcon="pi pi-spin pi-spinner"
               name="id"
               value={booking._id}
               label="Cancel"
