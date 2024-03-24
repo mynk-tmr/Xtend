@@ -4,16 +4,7 @@ import { InputText } from "primereact/inputtext";
 import { categories, facilities } from "@/features/listing";
 import { Button } from "primereact/button";
 import { Form, useNavigation, useSearchParams } from "react-router-dom";
-
-function fromEntriesv2(data: Iterable<[string, string]>) {
-  const json = {} as Record<string, string | string[]>;
-  for (const [key, value] of data) {
-    if (!json[key]) json[key] = value;
-    //@ts-expect-error this is fine
-    else json[key] = [json[key], value].flat(Infinity);
-  }
-  return json;
-}
+import fromEntriesv2 from "@/lib/fromEntriesv2";
 
 export const SearchForm = () => {
   const [searchParams] = useSearchParams();

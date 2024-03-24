@@ -90,7 +90,8 @@ export const CategoryFacilites = () => {
             value={f}
             id={f}
             name="facilities"
-            defaultChecked={list?.facilities.includes(f)}
+            //use optional chain for safe local storage access
+            defaultChecked={list?.facilities?.includes(f)}
           />
           {f}
         </label>
@@ -167,22 +168,23 @@ export const ImagePicker = () => {
 
       <section className="col-span-full mt-6 md:grid grid-cols-2">
         <h1 className="text-blood col-span-full">Previously selected images</h1>
-        {previousImages?.map((url, i) => (
-          <div key={i} className="p-4">
-            <Image src={url} />
-            {/* to send new updates to prev images in formdata */}
-            <input name="previousImages" hidden defaultValue={url} />
-            <Button
-              type="button"
-              label="Remove"
-              icon="pi pi-trash"
-              className="text-xs bg-blood w-full"
-              onClick={() => {
-                setPreviousImages(previousImages.filter((_, j) => i !== j));
-              }}
-            />
-          </div>
-        ))}
+        {Array.isArray(previousImages) &&
+          previousImages.map((url, i) => (
+            <div key={i} className="p-4">
+              <Image src={url} />
+              {/* to send new updates to prev images in formdata */}
+              <input name="previousImages" hidden defaultValue={url} />
+              <Button
+                type="button"
+                label="Remove"
+                icon="pi pi-trash"
+                className="text-xs bg-blood w-full"
+                onClick={() => {
+                  setPreviousImages(previousImages.filter((_, j) => i !== j));
+                }}
+              />
+            </div>
+          ))}
       </section>
     </FieldSetCustom>
   );

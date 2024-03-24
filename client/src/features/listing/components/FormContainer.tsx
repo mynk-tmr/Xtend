@@ -1,20 +1,15 @@
-import {
-  Form,
-  useActionData,
-  useNavigate,
-  useNavigation,
-} from "react-router-dom";
+import { useSubmissionEffect } from "@/hooks/useSubmissionEffect";
+import { Listing } from "@/types/listing";
+import { Button } from "primereact/button";
+import { createContext, useContext, useLayoutEffect, useRef } from "react";
+import { Form, useNavigate, useNavigation } from "react-router-dom";
 import {
   CategoryFacilites,
   IDDetails,
-  PriceFeatures,
   ImagePicker,
+  PriceFeatures,
 } from "./FormSections";
-import { Button } from "primereact/button";
-import { RouteActionData } from "@/types/actions";
-import { createContext, useContext, useEffect } from "react";
-import { useToast } from "@/providers/ToastProvider";
-import { Listing } from "@/types/listing";
+import fromEntriesv2 from "@/lib/fromEntriesv2";
 
 const FormContext = createContext<Listing | null>(null);
 // eslint-disable-next-line react-refresh/only-export-components
@@ -25,26 +20,27 @@ export const FormContainer = ({
 }: {
   defaultValues?: Listing | null;
 }) => {
-  const res = useActionData() as RouteActionData;
-  const toast = useToast();
   const { state } = useNavigation();
   const goto = useNavigate();
   const submitText = defaultValues ? "Update Listing" : "Add Listing";
+  const formRef = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    if (res?.ok) {
-      toast.success("Saved your listing");
-      goto("/dashboard");
-    } else if (res?.error) toast.error(res.error);
-    return () => {
-      if (res?.ok) res.ok = false;
-      if (res?.error) res.error = "";
-    };
-  }, [res, toast, goto]);
+  useSubmissionEffect(() => {
+    goto("/dashboard/listings");
+    localStorage.removeItem("draft");
+  }, "Listing created");
+
+  useLayoutEffect(() => () => {
+    //save form before unmounting
+    const fd = new FormData(formRef.current!);
+    localStorage.setItem("draft", JSON.stringify(fromEntriesv2(fd.entries())));
+  });
 
   return (
-    <FormContext.Provider value={defaultValues}>
+    <FormContext.Provider
+      value={defaultValues ?? JSON.parse(localStorage.getItem("draft")!)}>
       <Form
+        ref={formRef}
         encType="multipart/form-data"
         method={defaultValues ? "put" : "post"}
         className="grid md:grid-cols-2 gap-8">
