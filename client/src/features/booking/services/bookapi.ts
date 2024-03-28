@@ -4,7 +4,11 @@ const prefix = "bookings/";
 
 export const bookapi = {
   getall: async () => {
-    return await apiclient.get("bookings/all").json();
+    try {
+      return await apiclient.get("bookings/all").json();
+    } catch (err) {
+      return [];
+    }
   },
   request: async (form: FormData, id: string) => {
     const dates = (form.get("dates") as string).split(" - ");

@@ -70,7 +70,7 @@ export const RequestForm = ({
   const { user } = useAppContext();
   if (!user) {
     return (
-      <Link to="/auth/login">
+      <Link to="/auth/login" className="mx-auto">
         <Button
           label="Login to Book"
           icon="pi pi-shopping-cart"

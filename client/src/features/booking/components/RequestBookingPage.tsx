@@ -31,25 +31,22 @@ export const RequestBookingPage = () => {
           Quick and Simple. We make everything so easy.
         </h1>
       </header>
-      <section className="grid md:grid-cols-2 bg-[#EFEFEF]">
-        <AsyncUI promise={Promise.all([listing, bookings])}>
-          {([listing, bookings]) => (
-            <>
-              <section className="grid grid-rows-[375px_auto] items-center bg-gray-800">
-                <Gallery listing={listing} />
-                <RequestForm
-                  listing={listing}
-                  isAlreadyBooked={bookings.some(
-                    (b) =>
-                      b.listingId === listing._id && b.status !== "canceled"
-                  )}
-                />
-              </section>
-              <BookingInfo listing={listing} />
-            </>
-          )}
-        </AsyncUI>
-      </section>
+      <AsyncUI promise={Promise.all([listing, bookings])}>
+        {([listing, bookings]) => (
+          <section className="grid md:grid-cols-2 bg-[#EFEFEF]">
+            <section className="grid grid-rows-[375px_auto] items-center bg-gray-800">
+              <Gallery listing={listing} />
+              <RequestForm
+                listing={listing}
+                isAlreadyBooked={bookings.some(
+                  (b) => b.listingId === listing._id && b.status !== "canceled"
+                )}
+              />
+            </section>
+            <BookingInfo listing={listing} />
+          </section>
+        )}
+      </AsyncUI>
     </main>
   );
 };
