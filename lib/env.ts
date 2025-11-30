@@ -1,4 +1,4 @@
-import { treeifyError, z } from "zod/v4";
+import { flattenError, z } from "zod/v4";
 
 const envSchema = z.object({
   // Database
@@ -33,7 +33,7 @@ const envSchema = z.object({
 const envValidation = envSchema.safeParse(process.env);
 
 if (!envValidation.success) {
-  console.error(treeifyError(envValidation.error));
+  console.error(flattenError(envValidation.error));
   process.exit(1);
 }
 
