@@ -1,11 +1,10 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod/v4";
 
 // Image schema
 export const ImageSchema = z.object({
   url: z.url(),
   isThumbnail: z.boolean(),
-  _id: z.instanceof(ObjectId).optional(),
+  public_id: z.url(),
 });
 
 // Location schema
@@ -45,3 +44,6 @@ export const ComplaintStatusSchema = z.enum([
 ]);
 
 export const UserRoleSchema = z.enum(["user", "admin"]);
+
+//types
+export type PropertyTypeSchemaTypes = z.output<typeof PropertyTypeSchema>;

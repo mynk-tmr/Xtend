@@ -89,15 +89,11 @@ Implement the Hono backend as a catch-all route handler in `app/api/[...route]/r
 
 ## Phase 3: Frontend Implementation
 
-### 3.1 TanStack Query Setup
+### 3.1 TanStack + Ky setup
 
-Configure TanStack Query in a provider component with appropriate default options for caching and retries.
+Configure TanStack Query and Ky for api layer.
 
-### 3.2 API Client Configuration
-
-Set up a Ky instance with base URL pointing to our API routes and configure request interceptors for authentication.
-
-### 3.3 Landing Page
+### 3.2 Landing Page
 
 Create a landing page with good design, animations and ensure high SEO practices.
 

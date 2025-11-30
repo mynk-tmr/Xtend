@@ -1,19 +1,10 @@
-import { Sora as Sans } from "next/font/google";
-import "@/styles/globals.css";
-import {
-  ColorSchemeScript,
-  MantineProvider,
-  mantineHtmlProps,
-} from "@mantine/core";
-
-const sans = Sans({
-  variable: "--font-sans",
-  subsets: ["latin"],
-});
+import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
+import TanstackProvider from "@/components/providers/TanstackProvider";
+import ThemeProvider from "@/components/providers/ThemeProvider";
 
 export const metadata = {
-  title: "My Mantine app",
-  description: "I have followed setup instructions carefully",
+  title: "Xtended Space",
+  description: "E-commerce app to rent or list spaces of any kind.",
 };
 
 export default function RootLayout({
@@ -27,13 +18,9 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider
-          theme={{
-            ...sans.style,
-          }}
-        >
-          {children}
-        </MantineProvider>
+        <TanstackProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </TanstackProvider>
       </body>
     </html>
   );
