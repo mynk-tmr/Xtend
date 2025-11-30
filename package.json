@@ -1,0 +1,52 @@
+{
+  "name": "learn",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check --write .",
+    "lint:fix": "biome check --write --unsafe .",
+    "typegen": "next typegen",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/standard-validator": "^0.2.0",
+    "@hookform/resolvers": "^5.2.2",
+    "@iconify/react": "^6.0.2",
+    "@mantine/carousel": "^8.3.9",
+    "@mantine/core": "^8.3.9",
+    "@mantine/dropzone": "^8.3.9",
+    "@mantine/hooks": "^8.3.9",
+    "@mantine/modals": "^8.3.9",
+    "@mantine/notifications": "^8.3.9",
+    "@mantine/spotlight": "^8.3.9",
+    "@tanstack/react-query": "^5.90.11",
+    "@tanstack/react-query-devtools": "^5.91.1",
+    "better-auth": "^1.4.3",
+    "cloudinary": "^2.8.0",
+    "hono": "^4.10.7",
+    "ky": "^1.14.0",
+    "mapbox-gl": "^3.16.0",
+    "mongodb": "^7.0.0",
+    "motion": "^12.23.24",
+    "next": "16.0.5",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-hook-form": "^7.67.0",
+    "react-map-gl": "^8.1.0",
+    "resend": "^6.5.2",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/mapbox-gl": "^3.4.1",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

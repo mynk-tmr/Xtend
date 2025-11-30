@@ -1,0 +1,11 @@
+{
+  "files.readonlyInclude": {
+    ".next/**": true
+  },
+  "files.watcherExclude": {
+    ".next/**": true
+  },
+  "search.exclude": {
+    ".next/**": true
+  }
+}

@@ -1,0 +1,25 @@
+@layer theme, base, mantine, components, utilities;
+
+@import "tailwindcss";
+@import "@mantine/core/styles.layer.css";
+
+@layer base {
+  body {
+    @apply font-sans overflow-x-hidden min-h-screen;
+  }
+  * {
+    @apply custom-scroll;
+  }
+}
+
+@utility custom-scroll {
+  &::-webkit-scrollbar {
+    @apply w-1.5;
+  }
+  &::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    @apply bg-black rounded-full;
+  }
+}
