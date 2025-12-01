@@ -1,129 +1,152 @@
 "use client";
 
-import { Icon } from "@iconify/react";
-import { Avatar, Button, Rating } from "@mantine/core";
-import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { motion, useAnimation } from "motion/react";
+import Image from "next/image";
+import { useEffect, useEffectEvent } from "react";
 
-interface Testimonial {
-  id: string;
-  name: string;
-  avatar: string;
-  role: string;
-  content: string;
-  rating: number;
-  location: string;
-}
-
-const testimonials: Testimonial[] = [
+export const testimonials = [
   {
     id: "testimonial-1",
     name: "Manvika Madhrey",
     avatar: "https://i.pravatar.cc/150?img=1",
     role: "Event Planner",
     content:
-      "Xtended Space helped me find the perfect venue for my client's corporate event. The booking process was seamless and the space exceeded our expectations!",
+      "Xtended Space helped me find the perfect venue for my client's corporate event. Booking was seamless!",
     rating: 5,
     location: "Mumbai, Maharashtra",
   },
+
   {
     id: "testimonial-2",
-    name: "Arun Awasthi",
-    avatar: "https://i.pravatar.cc/150?img=3",
-    role: "Small Business Owner",
+    name: "Aarav Khurana",
+    avatar: "https://i.pravatar.cc/150?img=12",
+    role: "Wedding Photographer",
     content:
-      "I needed extra storage for my inventory and found exactly what I was looking for. The platform made it easy to compare options and prices.",
+      "I booked a studio in Delhi for a shoot. The process was instant and the place looked exactly like the photos.",
     rating: 5,
-    location: "Bangalore, Karnataka",
+    location: "New Delhi, Delhi",
   },
+
   {
     id: "testimonial-3",
-    name: "Supriya Patel",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    role: "Artist",
+    name: "Ritika Sharma",
+    avatar: "https://i.pravatar.cc/150?img=32",
+    role: "Interior Designer",
     content:
-      "As an artist, I needed a studio space that was both affordable and inspiring. I found the perfect creative space through Xtended Space.",
+      "Finding spacious homes for my clients became so easy. The filtering options saved me hours!",
     rating: 4,
-    location: "New Delhi, NCR",
+    location: "Gurugram, Haryana",
   },
+
   {
     id: "testimonial-4",
-    name: "Vikram Reddy",
-    avatar: "https://i.pravatar.cc/150?img=7",
-    role: "Photographer",
+    name: "Kabir Mehta",
+    avatar: "https://i.pravatar.cc/150?img=18",
+    role: "Startup Founder",
     content:
-      "The variety of spaces available is incredible. I've booked everything from studios to entire warehouses for my photoshoots.",
+      "Booked a meeting room for investor calls. Fast, reliable and transparent — exactly what I needed.",
+    rating: 5,
+    location: "Bengaluru, Karnataka",
+  },
+
+  {
+    id: "testimonial-5",
+    name: "Saanvi Rao",
+    avatar: "https://i.pravatar.cc/150?img=27",
+    role: "Fashion Stylist",
+    content:
+      "Loved the studio options for catalogue shoots! Extremely affordable and well-maintained spaces.",
     rating: 5,
     location: "Hyderabad, Telangana",
   },
+
   {
-    id: "testimonial-5",
-    name: "Kavita Nair",
-    avatar: "https://i.pravatar.cc/150?img=9",
-    role: "Startup Founder",
+    id: "testimonial-6",
+    name: "Raghav Tiwari",
+    avatar: "https://i.pravatar.cc/150?img=44",
+    role: "Corporate HR Manager",
     content:
-      "We needed temporary office space while our main office was being renovated. Found a great space that accommodated our entire team.",
+      "We needed a training hall for 80+ employees. Booking took less than 2 minutes — simply outstanding.",
     rating: 5,
     location: "Pune, Maharashtra",
   },
+
   {
-    id: "testimonial-6",
-    name: "Arjun Singh",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    role: "E-commerce Seller",
+    id: "testimonial-7",
+    name: "Ishita Banerjee",
+    avatar: "https://i.pravatar.cc/150?img=15",
+    role: "Event Decor Specialist",
     content:
-      "Finding storage for my products was always a challenge until I discovered Xtended Space. Now I have multiple locations across the city.",
+      "This platform has the best range of venues for intimate events. I've already booked three!",
     rating: 4,
-    location: "Chennai, Tamil Nadu",
+    location: "Kolkata, West Bengal",
+  },
+
+  {
+    id: "testimonial-8",
+    name: "Viraj Deshmukh",
+    avatar: "https://i.pravatar.cc/150?img=39",
+    role: "Freelance Videographer",
+    content:
+      "Super easy to find large indoor spaces for commercials. Pricing is clear and upfront.",
+    rating: 5,
+    location: "Nashik, Maharashtra",
+  },
+
+  {
+    id: "testimonial-9",
+    name: "Neha Kapoor",
+    avatar: "https://i.pravatar.cc/150?img=47",
+    role: "Blogger & Content Creator",
+    content:
+      "Found a beautiful rooftop café for a brand collaboration shoot. Highly recommended!",
+    rating: 5,
+    location: "Chandigarh",
+  },
+
+  {
+    id: "testimonial-10",
+    name: "Aditya Singh",
+    avatar: "https://i.pravatar.cc/150?img=21",
+    role: "Tour Operator",
+    content:
+      "I often need group stay venues. Xtended Space has made my work so much more efficient.",
+    rating: 4,
+    location: "Jaipur, Rajasthan",
   },
 ];
 
-export default function TestimonialsSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [shuffledTestimonials, setShuffledTestimonials] =
-    useState(testimonials);
+const marqueeData = [...testimonials, ...testimonials];
 
-  // Randomize testimonials on mount
-  useEffect(() => {
-    const shuffled = [...testimonials].sort(() => Math.random() - 0.5);
-    setShuffledTestimonials(shuffled);
-  }, []);
+export default function CombinedTestimonials() {
+  const controls1 = useAnimation();
+  const controls2 = useAnimation();
 
-  // Auto-rotate testimonials
-  useEffect(() => {
-    if (!isPaused) {
-      const interval = setInterval(() => {
-        setActiveIndex((prev) => (prev + 1) % shuffledTestimonials.length);
-      }, 5000); // Change every 5 seconds
+  // Core auto move logic — pure motion + state
+  const startMarquee = useEffectEvent(async () => {
+    while (true) {
+      await controls1.start({
+        x: "-50%",
+        transition: { duration: 15, ease: "linear" },
+      });
+      controls1.set({ x: "0%" });
 
-      return () => clearInterval(interval);
+      await controls2.start({
+        x: "0%",
+        transition: { duration: 15, ease: "linear" },
+      });
+      controls2.set({ x: "-50%" });
     }
-  }, [isPaused, shuffledTestimonials.length]);
+  });
 
-  const goToTestimonial = (index: number) => {
-    setActiveIndex(index);
-  };
-
-  const goToPrevious = () => {
-    setActiveIndex(
-      (prev) =>
-        (prev - 1 + shuffledTestimonials.length) % shuffledTestimonials.length,
-    );
-  };
-
-  const goToNext = () => {
-    setActiveIndex((prev) => (prev + 1) % shuffledTestimonials.length);
-  };
-
-  const togglePlayPause = () => {
-    setIsPaused(!isPaused);
-  };
+  useEffect(() => {
+    startMarquee();
+  });
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* HEADER */}
         <div className="text-center mb-16">
           <p className="text-lg text-blue-600 uppercase tracking-wider mb-4">
             What Our Users Say
@@ -137,150 +160,61 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        {/* Testimonials Carousel */}
-        <div className="relative max-w-4xl mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={shuffledTestimonials[activeIndex].id}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white rounded-2xl shadow-lg p-8 md:p-12"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
-              <div className="flex flex-col md:flex-row gap-8">
-                {/* Avatar and Info */}
-                <div className="flex flex-col items-center md:items-start">
-                  <Avatar
-                    src={shuffledTestimonials[activeIndex].avatar}
-                    alt={shuffledTestimonials[activeIndex].name}
-                    size={80}
-                    className="mb-4"
-                  />
-                  <div className="text-center md:text-left">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                      {shuffledTestimonials[activeIndex].name}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-2">
-                      {shuffledTestimonials[activeIndex].role}
-                    </p>
-                    <p className="text-xs text-blue-600">
-                      {shuffledTestimonials[activeIndex].location}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1">
-                  <Rating
-                    value={shuffledTestimonials[activeIndex].rating}
-                    fractions={2}
-                    readOnly
-                    className="mb-4"
-                  />
-                  <p className="text-lg text-gray-700 italic leading-relaxed">
-                    "{shuffledTestimonials[activeIndex].content}"
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Navigation Controls */}
-          <div className="flex justify-between items-center mt-8">
-            <Button
-              variant="outline"
-              color="gray"
-              size="sm"
-              radius="xl"
-              onClick={goToPrevious}
-              aria-label="Previous testimonial"
-            >
-              <Icon icon="heroicons:arrow-left" width={16} height={16} />
-            </Button>
-
-            {/* Progress Indicators */}
-            <div className="flex gap-2">
-              {shuffledTestimonials.map((_, index) => (
-                <button
-                  type="button"
-                  key={shuffledTestimonials[index].id}
-                  onClick={() => goToTestimonial(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    activeIndex === index
-                      ? "bg-blue-600 w-8"
-                      : "bg-gray-300 hover:bg-gray-400"
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            <Button
-              variant="outline"
-              color="gray"
-              size="sm"
-              radius="xl"
-              onClick={goToNext}
-              aria-label="Next testimonial"
-            >
-              <Icon icon="heroicons:arrow-right" width={16} height={16} />
-            </Button>
-          </div>
-
-          {/* Play/Pause Indicator */}
-          <div className="text-center mt-4">
-            <Button
-              variant="subtle"
-              color="gray"
-              size="xs"
-              radius="xl"
-              onClick={togglePlayPause}
-              aria-label={isPaused ? "Play testimonials" : "Pause testimonials"}
-            >
-              {isPaused ? (
-                <>
-                  <Icon
-                    icon="heroicons:play"
-                    width={12}
-                    height={12}
-                    className="mr-1"
-                  />
-                  Auto-play
-                </>
-              ) : (
-                <>
-                  <Icon
-                    icon="heroicons:pause"
-                    width={12}
-                    height={12}
-                    className="mr-1"
-                  />
-                  Auto-playing
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-
-        {/* Additional Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-blue-600 mb-2">10,000+</p>
-            <p className="text-lg text-gray-600">Spaces Listed</p>
-          </div>
-          <div className="text-center">
-            <p className="text-3xl font-bold text-blue-600 mb-2">50,000+</p>
-            <p className="text-lg text-gray-600">Happy Users</p>
-          </div>
-          <div className="text-center">
-            <p className="text-3xl font-bold text-blue-600 mb-2">100+</p>
-            <p className="text-lg text-gray-600">Cities Covered</p>
-          </div>
+        {/* Marqueees */}
+        <div className="relative overflow-hidden max-w-5xl mx-auto mb-12">
+          <motion.div
+            className="flex gap-4"
+            animate={controls1}
+            initial={{ x: "0%" }}
+          >
+            {marqueeData.map((t, i) => (
+              <TestimonialCard key={`${t.id}-r1-${i}`} data={t} />
+            ))}
+          </motion.div>
         </div>
       </div>
+
+      {/* Stats */}
+      <div className="flex flex-wrap justify-center gap-12 mt-16">
+        <Stat num="10,000+" label="Spaces Listed" />
+        <Stat num="50,000+" label="Happy Users" />
+        <Stat num="100+" label="Cities Covered" />
+      </div>
     </section>
+  );
+}
+
+type Testimonial = (typeof testimonials)[number];
+
+function TestimonialCard({ data }: { data: Testimonial }) {
+  return (
+    <div className="p-4 rounded-lg shadow hover:shadow-lg transition-all bg-white w-72 shrink-0">
+      <div className="flex gap-3">
+        <Image
+          width={44}
+          height={44}
+          src={data.avatar}
+          className="size-11 rounded-full"
+          alt={data.name}
+        />
+        <div>
+          <p className="font-medium">{data.name}</p>
+          <p className="text-xs text-slate-500">{data.role}</p>
+        </div>
+      </div>
+
+      <p className="text-sm py-4 text-gray-800">{data.content}</p>
+
+      <div className="text-xs text-slate-500">{data.location}</div>
+    </div>
+  );
+}
+
+function Stat({ num, label }: { num: string; label: string }) {
+  return (
+    <div className="text-center">
+      <p className="text-3xl font-bold text-blue-600">{num}</p>
+      <p className="text-lg text-gray-600">{label}</p>
+    </div>
   );
 }
