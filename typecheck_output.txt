@@ -1,0 +1,27 @@
+$ tsc --noEmit
+.next/dev/types/validator.ts(90,31): error TS2559: Type 'typeof import("C:/Users/tomar/Desktop/mayank/WebDev/xtended/app/api/[...route]/route")' has no properties in common with type 'RouteHandlerConfig<"/api/[...route]">'.
+.next/types/validator.ts(90,31): error TS2559: Type 'typeof import("C:/Users/tomar/Desktop/mayank/WebDev/xtended/app/api/[...route]/route")' has no properties in common with type 'RouteHandlerConfig<"/api/[...route]">'.
+app/api/[...route]/route.ts(12,29): error TS2307: Cannot find module '@/server/routes/users' or its corresponding type declarations.
+components/layout/Footer.tsx(109,17): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: LinkProps<"/terms">): JSX.Element', gave the following error.
+    Type '"/terms"' is not assignable to type 'UrlObject | RouteImpl<"/terms">'.
+  Overload 2 of 2, '(props: LinkProps<"/terms">): JSX.Element', gave the following error.
+    Type '"/terms"' is not assignable to type 'UrlObject | RouteImpl<"/terms">'.
+components/layout/Footer.tsx(113,17): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: LinkProps<"/privacy">): JSX.Element', gave the following error.
+    Type '"/privacy"' is not assignable to type 'UrlObject | RouteImpl<"/privacy">'.
+  Overload 2 of 2, '(props: LinkProps<"/privacy">): JSX.Element', gave the following error.
+    Type '"/privacy"' is not assignable to type 'UrlObject | RouteImpl<"/privacy">'.
+components/layout/Header.tsx(39,27): error TS2322: Type '"/listings"' is not assignable to type 'Route'.
+components/layout/Header.tsx(40,27): error TS2322: Type '"/how-it-works"' is not assignable to type 'Route'.
+components/layout/Header.tsx(41,27): error TS2322: Type '"/about"' is not assignable to type 'Route'.
+components/layout/Header.tsx(52,17): error TS2322: Type '"/auth/login"' is not assignable to type 'UrlObject | RouteImpl<unknown>'.
+components/layout/Header.tsx(56,40): error TS2322: Type '"/auth/register"' is not assignable to type 'UrlObject | RouteImpl<unknown>'.
+components/layout/Header.tsx(118,21): error TS2322: Type '"/auth/login"' is not assignable to type 'UrlObject | RouteImpl<unknown>'.
+components/layout/Header.tsx(126,21): error TS2322: Type '"/auth/register"' is not assignable to type 'UrlObject | RouteImpl<unknown>'.
+components/layout/Header.tsx(167,7): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: LinkProps<string>): JSX.Element', gave the following error.
+    Type 'string' is not assignable to type 'UrlObject | RouteImpl<string>'.
+  Overload 2 of 2, '(props: LinkProps<string>): JSX.Element', gave the following error.
+    Type 'string' is not assignable to type 'UrlObject | RouteImpl<string>'.
+error: script "typecheck" exited with code 1

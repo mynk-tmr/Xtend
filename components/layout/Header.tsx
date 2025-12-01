@@ -37,8 +37,6 @@ export default function Header() {
           {!isMobile && (
             <nav className="flex items-center space-x-8">
               <HeaderLink href="/listings" label="Browse Spaces" />
-              <HeaderLink href="/how-it-works" label="How It Works" />
-              <HeaderLink href="/about" label="About" />
             </nav>
           )}
 
@@ -49,11 +47,11 @@ export default function Header() {
                 variant="outline"
                 color="gray"
                 component={Link}
-                href="/auth/login"
+                href={"/auth/for/login" as Route}
               >
                 Log In
               </Button>
-              <Button component={Link} href="/auth/register">
+              <Button component={Link} href={"/auth/for/sign-up" as Route}>
                 Sign Up
               </Button>
             </div>
@@ -93,17 +91,6 @@ export default function Header() {
                   label="Browse Spaces"
                   onClick={() => setMobileMenuOpen(false)}
                 />
-                <MobileLink
-                  href="/how-it-works"
-                  label="How It Works"
-                  onClick={() => setMobileMenuOpen(false)}
-                />
-                <MobileLink
-                  href="/about"
-                  label="About"
-                  onClick={() => setMobileMenuOpen(false)}
-                />
-
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -115,7 +102,7 @@ export default function Header() {
                     color="gray"
                     fullWidth
                     component={Link}
-                    href="/auth/login"
+                    href="/auth/for/login"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Log In
@@ -123,7 +110,7 @@ export default function Header() {
                   <Button
                     fullWidth
                     component={Link}
-                    href="/auth/register"
+                    href="/auth/for/sign-up"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Sign Up
@@ -158,7 +145,7 @@ function MobileLink({
   label,
   onClick,
 }: {
-  href: string;
+  href: Route;
   label: string;
   onClick: () => void;
 }) {

@@ -9,7 +9,7 @@
     "lint": "biome check --write .",
     "lint:fix": "biome check --write --unsafe .",
     "typegen": "next typegen",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "bun --bun tsc --noEmit > typecheck_output.txt 2>&1"
   },
   "dependencies": {
     "@hono/standard-validator": "^0.2.0",

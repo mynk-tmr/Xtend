@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod/v4";
 
 export const signupSchema = z
   .object({
@@ -14,8 +14,6 @@ export const signupSchema = z
     path: ["confirmPassword"],
   });
 
-const any = z.undefined();
-
 export const loginSchema = signupSchema
   .pick({
     email: true,
@@ -23,10 +21,25 @@ export const loginSchema = signupSchema
     rememberMe: true,
   })
   .extend({
-    confirmPassword: any,
-    firstName: any,
-    lastName: any,
+    confirmPassword: z.undefined(),
+    firstName: z.undefined(),
+    lastName: z.undefined(),
   });
 
+export const forgotPasswordSchema = z.object({
+  email: z.email("Invalid email address"),
+});
+
+export const resetPasswordSchema = z.object({
+  currentPassword: z.string().min(6, "Password must be at least 6 characters"),
+  newPassword: z.string().min(6, "Please confirm your password"),
+});
+
+export const authModeSchema = z.enum(["sign-up", "login"]);
+export const passwordModeSchema = z.enum(["forgot", "reset"]);
+
+// Types
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type SignupFormData = z.infer<typeof signupSchema>;
+export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;

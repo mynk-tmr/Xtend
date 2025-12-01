@@ -114,9 +114,7 @@ export const schemaSearchParams = z.object({
       max: z.number().positive().optional(),
     })
     .optional(),
-  accessType: z
-    .enum(["24_7", "business_hours", "restricted", "weekends"])
-    .optional(),
+  accessType: AccessHoursSchema.optional(),
   amenities: z.array(z.string()).optional(),
   temperatureControlled: z.boolean().optional(),
   climateControlled: z.boolean().optional(),
