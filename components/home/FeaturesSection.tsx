@@ -23,10 +23,10 @@ const features: Feature[] = [
       "Book your desired space instantly with our streamlined booking process and get confirmation in minutes.",
   },
   {
-    icon: "mdi:headset",
-    title: "24/7 Support",
+    icon: "mdi:view-dashboard",
+    title: "Integrated Dashboard",
     description:
-      "Our dedicated support team is available round the clock to help you with any queries or issues.",
+      "Our dedicated dashboard lets you manage your listings and bookings, see metrics and get insights.",
   },
   {
     icon: "mdi:map-marker-multiple",
