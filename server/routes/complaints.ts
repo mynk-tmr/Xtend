@@ -2,14 +2,14 @@ import { sValidator } from "@hono/standard-validator";
 import { Hono } from "hono";
 import { ObjectId } from "mongodb";
 import type { BetterAuthVariables } from "@/lib/auth";
+import { adminAuthMiddleware, authMiddleware } from "@/server/middleware/auth";
 import {
   createComplaint,
   deleteComplaint,
   findComplaintById,
   findComplaintsByComplainantId,
   updateComplaintStatus,
-} from "@/lib/models/Complaint";
-import { adminAuthMiddleware, authMiddleware } from "@/server/middleware/auth";
+} from "@/server/models/Complaint";
 import {
   schemaCreateComplaint,
   schemaUpdateComplaint,

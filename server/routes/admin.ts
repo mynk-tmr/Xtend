@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 import type { BetterAuthVariables } from "@/lib/auth";
+import { adminAuthMiddleware } from "@/server/middleware/auth";
 import {
   findAllComplaints,
   updateComplaintStatus,
-} from "@/lib/models/Complaint";
-import { findAllListings } from "@/lib/models/Listing";
-import { adminAuthMiddleware } from "@/server/middleware/auth";
+} from "@/server/models/Complaint";
+import { findAllListings } from "@/server/models/Listing";
 
 export const adminRouter = new Hono<{ Variables: BetterAuthVariables }>();
 

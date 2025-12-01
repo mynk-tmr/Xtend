@@ -116,32 +116,27 @@ export const testimonials = [
   },
 ];
 
-const marqueeData = [...testimonials, ...testimonials];
-
 export default function CombinedTestimonials() {
   const controls1 = useAnimation();
   const controls2 = useAnimation();
 
   // Core auto move logic — pure motion + state
   const startMarquee = useEffectEvent(async () => {
-    while (true) {
-      await controls1.start({
-        x: "-50%",
-        transition: { duration: 15, ease: "linear" },
-      });
-      controls1.set({ x: "0%" });
+    // Start both animations simultaneously
+    controls1.start({
+      x: "-50%",
+      transition: { duration: 30, ease: "linear", repeat: Infinity },
+    });
 
-      await controls2.start({
-        x: "0%",
-        transition: { duration: 15, ease: "linear" },
-      });
-      controls2.set({ x: "-50%" });
-    }
+    controls2.start({
+      x: "0%",
+      transition: { duration: 30, ease: "linear", repeat: Infinity },
+    });
   });
 
   useEffect(() => {
     startMarquee();
-  });
+  }, []);
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">
@@ -160,15 +155,27 @@ export default function CombinedTestimonials() {
           </p>
         </div>
 
-        {/* Marqueees */}
-        <div className="relative overflow-hidden max-w-5xl mx-auto mb-12">
+        {/* Marquees */}
+        <div className="relative overflow-hidden max-w-5xl mx-auto mb-12 flex gap-4">
+          {/* First marquee track */}
           <motion.div
             className="flex gap-4"
             animate={controls1}
             initial={{ x: "0%" }}
           >
-            {marqueeData.map((t, i) => (
+            {testimonials.map((t, i) => (
               <TestimonialCard key={`${t.id}-r1-${i}`} data={t} />
+            ))}
+          </motion.div>
+
+          {/* Second marquee track - starts at -50% position */}
+          <motion.div
+            className="flex gap-4"
+            animate={controls2}
+            initial={{ x: "-50%" }}
+          >
+            {testimonials.map((t, i) => (
+              <TestimonialCard key={`${t.id}-r2-${i}`} data={t} />
             ))}
           </motion.div>
         </div>

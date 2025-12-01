@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { errorHandler } from "@/server/middleware/error";
 import { adminRouter } from "@/server/routes/admin";
+import { amenitiesRouter } from "@/server/routes/amenities";
 import { authRouter } from "@/server/routes/auth";
 import { bookingsRouter } from "@/server/routes/bookings";
 import { complaintsRouter } from "@/server/routes/complaints";
@@ -23,6 +24,7 @@ app.route("/listings", listingsRouter);
 app.route("/bookings", bookingsRouter);
 app.route("/shortlists", shortlistsRouter);
 app.route("/complaints", complaintsRouter);
+app.route("/amenities", amenitiesRouter);
 app.route("/admin", adminRouter);
 
 // Error handling

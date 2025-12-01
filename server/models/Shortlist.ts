@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { z } from "zod/v4";
-import { db } from "../db";
+import { db } from "@/lib/db";
 import type { Listing } from "./Listing";
 
 // Zod schema for Shortlist validation

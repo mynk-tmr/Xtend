@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { z } from "zod/v4";
+import { db } from "@/lib/db";
 import { BookingStatusSchema } from "@/server/validation/+others";
-import { db } from "../db";
 
 // Zod schema for Booking validation
 export const BookingSchema = z.object({

@@ -5,34 +5,28 @@
 ```
 xtended/
 ├── app/                          # Next.js App Router
-│   ├── (auth)/                   # Auth routes group
-│   │   ├── login/
+│   ├── auth/                   # Auth routes group
+│   │   ├── for/[mode]           #mode is sign-up or login
 │   │   │   └── page.tsx
-│   │   ├── register/
+│   │   ├── password/[mode]      #mode is forgot, reset
 │   │   │   └── page.tsx
-│   │   ├── forgot-password/
-│   │   │   └── page.tsx
-│   │   └── reset-password/
-│   │       └── page.tsx
-│   ├── (dashboard)/              # Dashboard routes group
-│   │   ├── dashboard/
-│   │   │   ├── page.tsx          # Combined renter/tenant dashboard
-│   │   │   ├── listings/
-│   │   │   │   ├── page.tsx      # View all listings
-│   │   │   │   ├── [id]/
-│   │   │   │   │   └── page.tsx  # View listing details
-│   │   │   │   └── new/
-│   │   │   │       └── page.tsx  # Create new listing
-│   │   │   ├── bookings/
-│   │   │   │   ├── page.tsx      # View bookings as renter
-│   │   │   │   └── requests/
-│   │   │   │       └── page.tsx  # View booking requests as tenant
-│   │   │   ├── profile/
-│   │   │   │   └── page.tsx      # User profile
-│   │   │   └── shortlists/
-│   │   │       └── page.tsx      # User's shortlisted properties
-│   ├── (admin)/                  # Admin routes group
-│   │   └── admin/
+│   ├── dashboard/                # Dashboard routes group
+│   │       ├── page.tsx          # Combined renter/tenant dashboard
+│   │       ├── listings/
+│   │       │   ├── page.tsx      # View all listings
+│   │       │   ├── [id]/
+│   │       │   │   └── page.tsx  # View listing details
+│   │       │   └── new/
+│   │       │       └── page.tsx  # Create new listing
+│   │       ├── bookings/
+│   │       │   ├── page.tsx      # View bookings as renter
+│   │       │   └── requests/
+│   │       │       └── page.tsx  # View booking requests as tenant
+│   │       ├── profile/
+│   │       │   └── page.tsx      # User profile
+│   │       └── shortlists/
+│   │          └── page.tsx      # User's shortlisted properties
+│   │── admin/
 │   │       ├── dashboard/
 │   │       │   └── page.tsx      # Admin dashboard
 │   │       ├── users/

@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import type { BetterAuthVariables } from "@/lib/auth";
+import { authMiddleware } from "@/server/middleware/auth";
 import {
   addToShortlist,
   getShortlistsWithListingDetails,
   isInShortlist,
   removeFromShortlist,
-} from "@/lib/models/Shortlist";
-import { authMiddleware } from "@/server/middleware/auth";
+} from "@/server/models/Shortlist";
 
 export const shortlistsRouter = new Hono<{ Variables: BetterAuthVariables }>();
 

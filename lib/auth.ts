@@ -1,5 +1,10 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} from "../server/services/emailService";
+import { deleteUserAccount } from "../server/services/userDeletionService";
 import { client, db } from "./db";
 
 export const auth = betterAuth({
@@ -7,13 +12,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendPasswordResetEmail(user, url);
+    },
   },
   emailVerification: {
     sendOnSignUp: true,
     expiresIn: 300, // 5 minutes
     sendVerificationEmail: async ({ user, url }) => {
-      // This will be implemented later with Resend
-      console.log(`Verification email sent to ${user.email}: ${url}`);
+      await sendVerificationEmail(user, url);
     },
   },
   user: {
@@ -35,6 +42,12 @@ export const auth = betterAuth({
       phoneNumber: {
         type: "string",
         required: false,
+      },
+    },
+    deleteUser: {
+      enabled: true,
+      async afterDelete(user) {
+        await deleteUserAccount(user.id);
       },
     },
   },

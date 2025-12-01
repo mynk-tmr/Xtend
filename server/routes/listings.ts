@@ -1,6 +1,7 @@
 import { sValidator } from "@hono/standard-validator";
 import { Hono } from "hono";
 import type { BetterAuthVariables } from "@/lib/auth";
+import { authMiddleware } from "@/server/middleware/auth";
 import {
   createListing,
   deleteListing,
@@ -9,8 +10,7 @@ import {
   findListingsByTenantId,
   searchListings,
   updateListing,
-} from "@/lib/models/Listing";
-import { authMiddleware } from "@/server/middleware/auth";
+} from "@/server/models/Listing";
 import {
   schemaCreateListing,
   schemaSearchParams,

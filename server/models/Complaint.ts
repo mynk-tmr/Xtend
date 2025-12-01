@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { z } from "zod/v4";
+import { db } from "@/lib/db";
 import { ComplaintStatusSchema } from "@/server/validation/+others";
-import { db } from "../db";
 
 // Zod schema for Complaint validation
 export const ComplaintSchema = z.object({

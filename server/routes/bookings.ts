@@ -2,6 +2,7 @@ import { sValidator } from "@hono/standard-validator";
 import { Hono } from "hono";
 import { ObjectId } from "mongodb";
 import type { BetterAuthVariables } from "@/lib/auth";
+import { authMiddleware } from "@/server/middleware/auth";
 import {
   createBooking,
   deleteBooking,
@@ -10,8 +11,7 @@ import {
   findBookingsByTenantId,
   findExistingBooking,
   updateBookingStatus,
-} from "@/lib/models/Booking";
-import { authMiddleware } from "@/server/middleware/auth";
+} from "@/server/models/Booking";
 import {
   schemaCreateBooking,
   schemaUpdateBooking,
