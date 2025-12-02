@@ -14,11 +14,13 @@ import {
   TextInput,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { z } from "zod/v4";
-import { useCreateListing } from "@/lib/hooks/useListings";
+import { getAmenitiesOptions } from "@/lib/api/amenities/options";
+import { getCreateListingOptions } from "@/lib/api/listings/options";
 import type { StorageTypeSchemaTypes } from "@/server/validation/+others";
 import { schemaCreateListing } from "@/server/validation/listings";
 
@@ -195,7 +197,10 @@ function LocationInput({ control, errors }: LocationInputProps) {
 }
 
 export default function ListingForm({ onSuccess, onCancel }: ListingFormProps) {
-  const createListingMutation = useCreateListing();
+  const queryClient = useQueryClient();
+  const createListingMutation = useMutation(
+    getCreateListingOptions(queryClient),
+  );
   const [active, setActive] = useState(0);
 
   const {
@@ -231,9 +236,16 @@ export default function ListingForm({ onSuccess, onCancel }: ListingFormProps) {
 
   const watchedStorageType = control._formValues?.storageType;
 
+  const { data: allAmenities } = useQuery(getAmenitiesOptions());
+
   const onSubmit = async (values: CreateListingFormData) => {
     try {
-      await createListingMutation.mutateAsync(values);
+      // Convert amenities array to include proper amenity IDs
+      const submissionData = {
+        ...values,
+        amenitiesId: values.amenitiesId || [],
+      };
+      await createListingMutation.mutateAsync(submissionData);
 
       notifications.show({
         title: "Success",
@@ -325,7 +337,7 @@ export default function ListingForm({ onSuccess, onCancel }: ListingFormProps) {
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Step 1: Basic Information */}
           {active === 0 && (
             <motion.div
@@ -503,11 +515,6 @@ export default function ListingForm({ onSuccess, onCancel }: ListingFormProps) {
                       />
                     )}
                   />
-
-                  <Checkbox
-                    label="Drive-up Access"
-                    {...control.register("driveUpAccess")}
-                  />
                 </div>
               )}
 
@@ -601,23 +608,19 @@ export default function ListingForm({ onSuccess, onCancel }: ListingFormProps) {
                 </div>
               )}
 
-              {/* Common Features */}
+              {/* Amenities Selection */}
               <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium text-gray-900">Common Features</h4>
-                <Group>
-                  <Checkbox
-                    label="Climate Controlled"
-                    {...control.register("climateControlled")}
-                  />
-                  <Checkbox
-                    label="Individual Alarm"
-                    {...control.register("individualAlarm")}
-                  />
-                  <Checkbox
-                    label="Pest Control"
-                    {...control.register("pestControl")}
-                  />
-                </Group>
+                <h4 className="font-medium text-gray-900">Amenities</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {allAmenities?.map((amenity) => (
+                    <Checkbox
+                      key={amenity._id}
+                      label={amenity.name}
+                      value={amenity._id}
+                      {...control.register("amenitiesId")}
+                    />
+                  ))}
+                </div>
               </div>
 
               <Checkbox

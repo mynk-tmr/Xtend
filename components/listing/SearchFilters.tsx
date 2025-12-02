@@ -5,16 +5,18 @@ import {
   Accordion,
   Button,
   Checkbox,
+  MultiSelect,
   NumberInput,
   RangeSlider,
   Select,
   Text,
 } from "@mantine/core";
 import { useState } from "react";
+import type { ListingSearchParams } from "@/lib/api/listings/calls";
 import type { StorageTypeSchemaTypes } from "@/server/validation/+others";
 
 interface SearchFiltersProps {
-  onFiltersChange: (filters: any) => void;
+  onFiltersChange: (filters: ListingSearchParams) => void;
   onReset: () => void;
 }
 
@@ -22,17 +24,21 @@ export default function SearchFilters({
   onFiltersChange,
   onReset,
 }: SearchFiltersProps) {
-  const [filters, setFilters] = useState({
-    storageType: "",
-    areaRange: { min: 0, max: 10000 },
-    priceRange: { min: 0, max: 100000 },
+  const MIN_INTEGER = 0;
+  const MAX_INTEGER = 10_000;
+  const defaultFilters: ListingSearchParams = {
+    storageType: undefined,
+    areaRange: { min: MIN_INTEGER, max: MAX_INTEGER },
+    priceRange: { min: MIN_INTEGER, max: MAX_INTEGER },
     climateControlled: false,
     temperatureControlled: false,
     city: "",
     state: "",
-    businessType: [] as string[],
-    vehicleType: [] as string[],
-  });
+    businessType: [],
+    vehicleType: [],
+  };
+
+  const [filters, setFilters] = useState(defaultFilters);
 
   const storageTypes: { value: StorageTypeSchemaTypes; label: string }[] = [
     { value: "self_storage", label: "Self Storage" },
@@ -61,24 +67,16 @@ export default function SearchFilters({
     { value: "fleet", label: "Fleet" },
   ];
 
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = <T extends keyof typeof filters>(
+    key: T,
+    value: (typeof filters)[T],
+  ) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFiltersChange(newFilters);
   };
 
   const handleReset = () => {
-    const defaultFilters = {
-      storageType: "",
-      areaRange: { min: 0, max: 10000 },
-      priceRange: { min: 0, max: 100000 },
-      climateControlled: false,
-      temperatureControlled: false,
-      city: "",
-      state: "",
-      businessType: [] as string[],
-      vehicleType: [] as string[],
-    };
     setFilters(defaultFilters);
     onReset();
   };
@@ -102,7 +100,12 @@ export default function SearchFilters({
                 placeholder="Select storage type"
                 data={storageTypes}
                 value={filters.storageType}
-                onChange={(value) => handleFilterChange("storageType", value)}
+                onChange={(value) =>
+                  handleFilterChange(
+                    "storageType",
+                    value as ListingSearchParams["storageType"],
+                  )
+                }
                 clearable
               />
 
@@ -110,7 +113,7 @@ export default function SearchFilters({
                 <NumberInput
                   label="Min Area (sq ft)"
                   placeholder="Minimum area"
-                  value={filters.areaRange.min}
+                  value={filters.areaRange?.min}
                   onChange={(value) =>
                     handleFilterChange("areaRange", {
                       ...filters.areaRange,
@@ -121,7 +124,7 @@ export default function SearchFilters({
                 <NumberInput
                   label="Max Area (sq ft)"
                   placeholder="Maximum area"
-                  value={filters.areaRange.max}
+                  value={filters.areaRange?.max}
                   onChange={(value) =>
                     handleFilterChange("areaRange", {
                       ...filters.areaRange,
@@ -139,7 +142,10 @@ export default function SearchFilters({
                   min={0}
                   max={100000}
                   step={1000}
-                  value={[filters.priceRange.min, filters.priceRange.max]}
+                  value={[
+                    filters.priceRange?.min || MIN_INTEGER,
+                    filters.priceRange?.max || MAX_INTEGER,
+                  ]}
                   onChange={(value) =>
                     handleFilterChange("priceRange", {
                       min: value[0],
@@ -192,22 +198,32 @@ export default function SearchFilters({
                 }
               />
 
-              <Select
+              <MultiSelect
                 label="Business Type"
                 placeholder="Select business type"
                 data={businessTypes}
-                value={filters.businessType as any}
-                onChange={(value) => handleFilterChange("businessType", value)}
+                value={filters.businessType}
+                onChange={(value) =>
+                  handleFilterChange(
+                    "businessType",
+                    value as ListingSearchParams["businessType"],
+                  )
+                }
                 clearable
                 multiple
               />
 
-              <Select
+              <MultiSelect
                 label="Vehicle Type"
                 placeholder="Select vehicle type"
                 data={vehicleTypes}
-                value={filters.vehicleType as any}
-                onChange={(value) => handleFilterChange("vehicleType", value)}
+                value={filters.vehicleType}
+                onChange={(value) =>
+                  handleFilterChange(
+                    "vehicleType",
+                    value as ListingSearchParams["vehicleType"],
+                  )
+                }
                 clearable
                 multiple
               />
@@ -231,7 +247,7 @@ export default function SearchFilters({
                   type="text"
                   placeholder="Enter city"
                   value={filters.city}
-                  onChange={(event: any) =>
+                  onChange={(event) =>
                     handleFilterChange("city", event.target.value)
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -240,7 +256,7 @@ export default function SearchFilters({
                   type="text"
                   placeholder="Enter state"
                   value={filters.state}
-                  onChange={(event: any) =>
+                  onChange={(event) =>
                     handleFilterChange("state", event.target.value)
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -5,6 +5,7 @@ import { Button, TextInput } from "@mantine/core";
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 
 const sections = [
   {
@@ -49,7 +50,7 @@ export default function Footer() {
     <footer className="text-white bg-zinc-900 -mx-4">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 pt-12 pb-2">
-        <div className="flex flex-wrap justify-between">
+        <div className="flex flex-wrap justify-between gap-y-6">
           <DeveloperInfo />
           <NewsLetterSection />
         </div>
@@ -104,13 +105,16 @@ export default function Footer() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.7 }}
       >
-        <p className="text-sm font-semibold text-zinc-400">
+        <p className="text-sm font-semibold text-zinc-400 flex flex-wrap gap-2">
           © {new Date().getFullYear()} Xtended Space. All rights reserved. |
-          <Link href="/terms" className="hover:text-white underline ml-1">
+          <Link href={ROUTES.TERMS} className="hover:text-white underline ml-1">
             Terms
           </Link>{" "}
           |
-          <Link href="/privacy" className="hover:text-white underline ml-1">
+          <Link
+            href={ROUTES.PRIVACY}
+            className="hover:text-white underline ml-1"
+          >
             Privacy
           </Link>
         </p>

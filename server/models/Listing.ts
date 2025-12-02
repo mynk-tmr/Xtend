@@ -1,118 +1,58 @@
-import { ObjectId } from "mongodb";
+import { type Filter, ObjectId } from "mongodb";
 import { z } from "zod/v4";
 import { db } from "@/lib/db";
 import {
   AccessHoursSchema,
+  AgriculturalUnitDetailsSchema,
+  CommercialUnitDetailsSchema,
+  CoworkingUnitDetailsSchema,
   ImageSchema,
   LocationSchema,
   PriceSchema,
+  SelfStorageUnitDetailsSchema,
+  SpecializedUnitDetailsSchema,
   StorageTypeSchema,
   type StorageTypeSchemaTypes,
+  VehicleUnitDetailsSchema,
+  WarehouseUnitDetailsSchema,
+  WorkshopUnitDetailsSchema,
 } from "@/server/validation/+others";
 
 // Storage Listing Schema with optional fields for different storage types
-export const StorageListingSchema = z.object({
-  _id: z.instanceof(ObjectId).optional(),
-  title: z.string().min(1),
-  description: z.string().min(1),
-  price: PriceSchema,
-  location: LocationSchema,
+export const StorageListingSchema = z
+  .object({
+    _id: z.instanceof(ObjectId).optional(),
+    tenantId: z.instanceof(ObjectId),
+    isAvailable: z.boolean().default(true),
 
-  // Storage-specific fields
-  storageType: StorageTypeSchema,
-  area: z.number().positive(), // Square feet
-  height: z.number().positive(), // Ceiling height in feet
-  loadingCapacity: z.number().positive().optional(), // Weight capacity in kg/tons
+    //describe
+    title: z.string().min(1),
+    description: z.string().min(1),
+    price: PriceSchema,
+    location: LocationSchema,
+    storageType: StorageTypeSchema,
+    area: z.number().positive(), // Square feet
+    height: z.number().positive(), // Ceiling height in feet
+    loadingCapacity: z.number().positive().optional(), // Weight capacity in kg/tons
+    accessHours: AccessHoursSchema,
+    amenitiesId: z.array(z.instanceof(ObjectId)), // References to Amenity documents
+    images: z.array(ImageSchema).optional(),
 
-  // Access and availability
-  accessHours: AccessHoursSchema,
-
-  // Self Storage fields
-  unitNumber: z.string().optional(),
-  floorLevel: z.number().int().positive().optional(),
-  unitSize: z.enum(["small", "medium", "large", "extra_large"]).optional(),
-  driveUpAccess: z.boolean().optional(),
-
-  // Warehouse fields
-  warehouseSize: z.enum(["small", "medium", "large"]).optional(),
-  dockDoors: z.number().int().nonnegative().optional(),
-  officeSpace: z.number().nonnegative().optional(),
-  ceilingHeight: z.number().positive().optional(),
-  sprinklerSystem: z.boolean().optional(),
-  forkliftAvailable: z.boolean().optional(),
-  truckAccess: z.boolean().optional(),
-
-  // Commercial fields
-  businessType: z
-    .enum(["retail", "restaurant", "office", "pharmacy", "other"])
-    .optional(),
-  shelvingIncluded: z.boolean().optional(),
-  displayArea: z.boolean().optional(),
-  customerAccess: z.boolean().optional(),
-  loadingDock: z.boolean().optional(),
-
-  // Vehicle fields
-  vehicleType: z.enum(["car", "rv", "boat", "motorcycle", "fleet"]).optional(),
-  coveredParking: z.boolean().optional(),
-  securityGuard: z.boolean().optional(),
-  washBay: z.boolean().optional(),
-  maintenanceArea: z.boolean().optional(),
-  chargingStation: z.boolean().optional(),
-
-  // Specialized fields
-  specialtyType: z
-    .enum(["wine", "art", "antique", "electronics", "documents"])
-    .optional(),
-  temperatureRange: z
-    .object({
-      min: z.number(),
-      max: z.number(),
-    })
-    .optional(),
-  humidityControl: z.boolean().optional(),
-  lightControl: z.boolean().optional(),
-  vibrationControl: z.boolean().optional(),
-  airQualityControl: z.boolean().optional(),
-
-  // Workshop fields
-  workshopType: z
-    .enum(["woodworking", "auto", "art", "maker", "general"])
-    .optional(),
-  ventilationSystem: z.boolean().optional(),
-  powerSupply: z.number().positive().optional(),
-  workbenches: z.boolean().optional(),
-  toolStorage: z.boolean().optional(),
-  soundProofing: z.boolean().optional(),
-
-  // Coworking fields
-  spaceType: z.enum(["hybrid", "flexible", "popup"]).optional(),
-  meetingRooms: z.boolean().optional(),
-  wifiIncluded: z.boolean().optional(),
-  kitchenAccess: z.boolean().optional(),
-  receptionService: z.boolean().optional(),
-
-  // Agricultural fields
-  agricultureType: z
-    .enum(["grain", "equipment", "produce", "livestock", "other"])
-    .optional(),
-  drainageSystem: z.boolean().optional(),
-  loadingEquipment: z.boolean().optional(),
-
-  // Common fields
-  climateControlled: z.boolean().optional(),
-  individualAlarm: z.boolean().optional(),
-  pestControl: z.boolean().optional(),
-
-  amenities: z.array(z.instanceof(ObjectId)), // References to Amenity documents
-  images: z.array(ImageSchema).optional(),
-  tenantId: z.instanceof(ObjectId),
-  isAvailable: z.boolean().default(true),
-  createdAt: z.date().default(new Date()),
-  updatedAt: z.date().default(new Date()),
-});
+    //timestamps
+    createdAt: z.date().default(new Date()),
+    updatedAt: z.date().default(new Date()),
+  })
+  .extend(SelfStorageUnitDetailsSchema.partial())
+  .extend(WarehouseUnitDetailsSchema.partial())
+  .extend(CommercialUnitDetailsSchema.partial())
+  .extend(VehicleUnitDetailsSchema.partial())
+  .extend(SpecializedUnitDetailsSchema.partial())
+  .extend(WorkshopUnitDetailsSchema.partial())
+  .extend(CoworkingUnitDetailsSchema.partial())
+  .extend(AgriculturalUnitDetailsSchema.partial());
 
 // TypeScript type derived from schema
-export type StorageListing = z.infer<typeof StorageListingSchema>;
+export type StorageListing = z.output<typeof StorageListingSchema>;
 
 // Legacy Listing type for backward compatibility
 export const ListingSchema = StorageListingSchema;
@@ -135,7 +75,7 @@ export async function createListing(
     updatedAt: new Date(),
   };
 
-  const result = await ListingCollection().insertOne(listing as any);
+  const result = await ListingCollection().insertOne(listing);
   return { ...listing, _id: result.insertedId } as Listing;
 }
 
@@ -166,7 +106,7 @@ export async function updateListing(
 ): Promise<Listing | null> {
   const result = await ListingCollection().updateOne(
     { _id: new ObjectId(id) },
-    { $set: { ...updateData, updatedAt: new Date() } as any },
+    { $set: { ...updateData, updatedAt: new Date() } },
   );
 
   if (result.matchedCount === 0) return null;
@@ -218,14 +158,12 @@ export async function searchStorageListings(
     priceRange?: { min: number; max: number };
     city?: string;
     state?: string;
-    climateControlled?: boolean;
-    temperatureControlled?: boolean;
     amenities?: string[];
   } = {},
   limit: number = 10,
   skip: number = 0,
 ): Promise<Listing[]> {
-  const query: any = {};
+  const query: Filter<Listing> = {};
 
   if (filters.storageType) {
     query.storageType = filters.storageType;
@@ -253,16 +191,10 @@ export async function searchStorageListings(
     query["location.state"] = { $regex: filters.state, $options: "i" };
   }
 
-  if (filters.climateControlled !== undefined) {
-    query.climateControlled = filters.climateControlled;
-  }
-
-  if (filters.temperatureControlled !== undefined) {
-    query.temperatureControlled = filters.temperatureControlled;
-  }
-
   if (filters.amenities && filters.amenities.length > 0) {
-    query.amenities = { $in: filters.amenities.map((id) => new ObjectId(id)) };
+    query.amenitiesId = {
+      $in: filters.amenities.map((id) => new ObjectId(id)),
+    };
   }
 
   const listings = await ListingCollection()

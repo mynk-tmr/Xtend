@@ -118,6 +118,16 @@ export async function searchAmenities(
 export const PREDEFINED_AMENITIES = {
   security: [
     {
+      name: "Climate Controlled",
+      icon: "mdi:weather-snowy",
+      description: "Temperature Control Facility",
+    },
+    {
+      name: "Drive-Up Access",
+      icon: "mdi:car",
+      description: "Accessible via Vehicles",
+    },
+    {
       name: "24/7 CCTV Surveillance",
       icon: "mdi:cctv",
       description: "Continuous video surveillance",

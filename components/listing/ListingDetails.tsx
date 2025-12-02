@@ -3,9 +3,10 @@
 import { Icon } from "@iconify/react";
 import { Badge, Button, Card, Group, Text, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useListing } from "@/lib/hooks/useListings";
+import { getListingOptions } from "@/lib/api/listings/options";
 
 interface ListingDetailsProps {
   listingId: string;
@@ -13,7 +14,11 @@ interface ListingDetailsProps {
 
 export default function ListingDetails({ listingId }: ListingDetailsProps) {
   const router = useRouter();
-  const { data: listing, isLoading, error } = useListing(listingId);
+  const {
+    data: listing,
+    isLoading,
+    error,
+  } = useQuery(getListingOptions(listingId));
 
   const handleContactOwner = () => {
     notifications.show({
@@ -126,7 +131,7 @@ export default function ListingDetails({ listingId }: ListingDetailsProps) {
               <div className="relative h-full">
                 <Image
                   src={
-                    listing.images.find((img: any) => img.isThumbnail)?.url ||
+                    listing.images.find((img) => img.isThumbnail)?.url ||
                     listing.images[0].url
                   }
                   alt={listing.title}
@@ -175,7 +180,7 @@ export default function ListingDetails({ listingId }: ListingDetailsProps) {
               Description
             </Title>
             <Text size="lg" className="leading-relaxed">
-              {listing.description}
+              {listing.description as any}
             </Text>
           </div>
 
@@ -257,16 +262,6 @@ export default function ListingDetails({ listingId }: ListingDetailsProps) {
               Features & Amenities
             </Title>
             <div className="flex flex-wrap gap-2">
-              {listing.climateControlled && (
-                <Badge color="blue" variant="light" size="sm">
-                  Climate Controlled
-                </Badge>
-              )}
-              {listing.driveUpAccess && (
-                <Badge color="green" variant="light" size="sm">
-                  Drive-up Access
-                </Badge>
-              )}
               {listing.accessHours.type === "24_7" && (
                 <Badge color="orange" variant="light" size="sm">
                   24/7 Access

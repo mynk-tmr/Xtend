@@ -1,39 +1,20 @@
 import { Icon } from "@iconify/react";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import z from "zod/v4";
 import LoginForm from "@/components/forms/LoginForm";
-import { auth } from "@/lib/auth";
+import { ROUTES } from "@/constants/routes";
+import { checkParamsAndRedirect } from "@/lib/check-methods";
+import { authModeSchema } from "@/server/validation/auth";
 
 export const metadata: Metadata = {
   title: "Login - Xtended Space",
   description: "Sign in to your Xtended Space account",
 };
 
-function checkParamsAndRedirect(mode: string) {
-  const schema = z.enum(["sign-up", "login"]).catch("login");
-  const result = schema.safeParse(mode);
-  if (result.success) return result.data;
-  throw redirect("/");
-}
-
-async function checkSessionAndRedirect() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session) {
-    throw redirect("/dashboard");
-  }
-  return session;
-}
-
 export default async function LoginPage(props: PageProps<"/auth/for/[mode]">) {
-  await checkSessionAndRedirect();
   const { mode } = await props.params;
-  const isLogin = checkParamsAndRedirect(mode) === "login";
+  const out = checkParamsAndRedirect(mode, authModeSchema, ROUTES.AUTHSIGN_UP);
+  const isLogin = out === "login";
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

@@ -144,7 +144,7 @@ Create a landing page with good design, animations and ensure high SEO practices
    - No calendar/date selection (as per requirements)
    - Submit for approval workflow
 
-2. **Booking Management** (`app/(dashboard)/dashboard/bookings/`)
+2. **Booking Management** (`app/dashboard/bookings/`)
    - View bookings as renter
    - View booking requests as tenant
    - Approve/reject/cancel actions
@@ -152,13 +152,13 @@ Create a landing page with good design, animations and ensure high SEO practices
 
 ### 4.4 User Dashboard
 
-1. **Combined Dashboard** (`app/(dashboard)/dashboard/page.tsx`)
+1. **Combined Dashboard** (`app/dashboard/page.tsx`)
    - Stats cards showing listings, bookings, shortlists
    - Recent activity feed
    - Quick actions section
    - Navigation to detailed views
 
-2. **Profile Management** (`app/(dashboard)/dashboard/profile/page.tsx`)
+2. **Profile Management** (`app/dashboard/profile/page.tsx`)
    - Edit personal information
    - Upload profile picture with Cloudinary
    - Change password functionality

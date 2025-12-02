@@ -68,8 +68,6 @@ export const SelfStorageUnitDetailsSchema = z.object({
   unitNumber: z.string(),
   floorLevel: z.number().int().positive(),
   unitSize: z.enum(["small", "medium", "large", "extra_large"]),
-  driveUpAccess: z.boolean(),
-  climateControlled: z.boolean(),
   individualAlarm: z.boolean(),
 });
 
@@ -153,42 +151,6 @@ export const AgriculturalUnitDetailsSchema = z.object({
   loadingEquipment: z.boolean(),
 });
 
-// Discriminated Union for Unit Details
-export const UnitDetailsSchema = z.discriminatedUnion("storageType", [
-  z.object({
-    storageType: z.literal("self_storage"),
-    unitDetails: SelfStorageUnitDetailsSchema,
-  }),
-  z.object({
-    storageType: z.literal("warehouse"),
-    unitDetails: WarehouseUnitDetailsSchema,
-  }),
-  z.object({
-    storageType: z.literal("commercial"),
-    unitDetails: CommercialUnitDetailsSchema,
-  }),
-  z.object({
-    storageType: z.literal("vehicle"),
-    unitDetails: VehicleUnitDetailsSchema,
-  }),
-  z.object({
-    storageType: z.literal("specialized"),
-    unitDetails: SpecializedUnitDetailsSchema,
-  }),
-  z.object({
-    storageType: z.literal("workshop"),
-    unitDetails: WorkshopUnitDetailsSchema,
-  }),
-  z.object({
-    storageType: z.literal("coworking"),
-    unitDetails: CoworkingUnitDetailsSchema,
-  }),
-  z.object({
-    storageType: z.literal("agricultural"),
-    unitDetails: AgriculturalUnitDetailsSchema,
-  }),
-]);
-
 export const BookingStatusSchema = z.enum([
   "pending",
   "approved",
@@ -235,4 +197,3 @@ export type CoworkingUnitDetailsTypes = z.output<
 export type AgriculturalUnitDetailsTypes = z.output<
   typeof AgriculturalUnitDetailsSchema
 >;
-export type UnitDetailsTypes = z.output<typeof UnitDetailsSchema>;

@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import type { Route } from "next";
 import Link from "next/link";
 import { useState } from "react";
+import { ROUTES } from "@/constants/routes";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -47,11 +48,11 @@ export default function Header() {
                 variant="outline"
                 color="gray"
                 component={Link}
-                href={"/auth/for/login" as Route}
+                href={ROUTES.AUTHLOGIN}
               >
                 Log In
               </Button>
-              <Button component={Link} href={"/auth/for/sign-up" as Route}>
+              <Button component={Link} href={ROUTES.AUTHSIGN_UP}>
                 Sign Up
               </Button>
             </div>
@@ -102,7 +103,7 @@ export default function Header() {
                     color="gray"
                     fullWidth
                     component={Link}
-                    href="/auth/for/login"
+                    href={ROUTES.AUTHLOGIN}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Log In
@@ -110,7 +111,7 @@ export default function Header() {
                   <Button
                     fullWidth
                     component={Link}
-                    href="/auth/for/sign-up"
+                    href={ROUTES.AUTHSIGN_UP}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Sign Up

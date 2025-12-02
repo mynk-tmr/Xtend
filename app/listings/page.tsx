@@ -15,12 +15,13 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import SearchFilters from "@/components/listing/SearchFilters";
-import type { ListingSearchParams } from "@/lib/api/listings";
-import { useListings } from "@/lib/hooks/useListings";
+import type { ListingSearchParams } from "@/lib/api/listings/calls";
+import { getListingsOptions } from "@/lib/api/listings/options";
 
 export default function ListingsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,11 +32,13 @@ export default function ListingsPage() {
     data: listings,
     isLoading,
     error,
-  } = useListings({
-    ...filters,
-    search: searchTerm,
-    limit: 12,
-  });
+  } = useQuery(
+    getListingsOptions({
+      ...filters,
+      search: searchTerm,
+      limit: 12,
+    }),
+  );
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
@@ -248,16 +251,6 @@ export default function ListingsPage() {
 
                       {/* Key Features */}
                       <div className="flex flex-wrap gap-2 mt-3">
-                        {listing.climateControlled && (
-                          <Badge color="blue" variant="light" size="sm">
-                            Climate Controlled
-                          </Badge>
-                        )}
-                        {listing.driveUpAccess && (
-                          <Badge color="green" variant="light" size="sm">
-                            Drive-up Access
-                          </Badge>
-                        )}
                         {listing.accessHours.type === "24_7" && (
                           <Badge color="orange" variant="light" size="sm">
                             24/7 Access

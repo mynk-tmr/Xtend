@@ -2,10 +2,7 @@ import { Icon } from "@iconify/react";
 import type { Metadata, Route } from "next";
 import Link from "next/link";
 import PasswordResetForm from "@/components/forms/PasswordReset";
-import {
-  checkParamsAndRedirect,
-  checkSessionAndRedirect,
-} from "@/lib/check-methods";
+import { checkNoAuth, checkParamsAndRedirect } from "@/lib/check-methods";
 import { passwordModeSchema } from "@/server/validation/auth";
 
 export const metadata: Metadata = {
@@ -16,7 +13,7 @@ export const metadata: Metadata = {
 export default async function PasswordPage(props: {
   params: Promise<{ mode: string }>;
 }) {
-  await checkSessionAndRedirect();
+  await checkNoAuth();
   const { mode } = await props.params;
   const isForgot =
     checkParamsAndRedirect(
