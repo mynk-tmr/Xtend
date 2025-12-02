@@ -3,6 +3,8 @@ import { HonoApp } from "@/server/app";
 
 const app = HonoApp;
 
+export const runtime = "nodejs";
+
 export const GET = handle(app);
 export const POST = handle(app);
 export const PUT = handle(app);
