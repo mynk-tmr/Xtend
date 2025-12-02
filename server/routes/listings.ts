@@ -1,5 +1,6 @@
 import { sValidator } from "@hono/standard-validator";
 import { Hono } from "hono";
+import { ObjectId } from "mongodb";
 import type { BetterAuthVariables } from "@/lib/auth";
 import { authMiddleware } from "@/server/middleware/auth";
 import {
@@ -27,7 +28,7 @@ listingsRouter.get("/", sValidator("query", schemaSearchParams), async (c) => {
     limit = 10,
     skip = 0,
     businessType,
-    amenities,
+    amenitiesId,
     vehicleType,
     ...filters
   } = params;
@@ -47,10 +48,10 @@ listingsRouter.get("/", sValidator("query", schemaSearchParams), async (c) => {
         ...(vehicleType &&
           vehicleType.length > 0 && { vehicleType: vehicleType[0] }),
         // Convert string amenities to ObjectIds if they exist
-        ...(amenities &&
-          amenities.length > 0 && {
-            amenities: amenities.map(
-              (id) => new (require("mongodb").ObjectId)(id),
+        ...(amenitiesId &&
+          amenitiesId.length > 0 && {
+            amenitiesId: amenitiesId.map((id) =>
+              typeof id === "string" ? new ObjectId(id) : id,
             ),
           }),
       };
@@ -91,13 +92,13 @@ listingsRouter.post(
     const data = c.req.valid("json");
 
     try {
-      // Convert string amenities to ObjectIds
+      // Convert string amenities to ObjectIds if needed
       const processedData = {
         ...data,
-        amenities: data.amenities.map(
-          (id) => new (require("mongodb").ObjectId)(id),
+        amenitiesId: data.amenitiesId.map((id) =>
+          typeof id === "string" ? new ObjectId(id) : id,
         ),
-        tenantId: new (require("mongodb").ObjectId)(user.id),
+        tenantId: new ObjectId(user.id),
       };
       const listing = await createListing(processedData);
       return c.json({ data: listing }, 201);
@@ -131,9 +132,9 @@ listingsRouter.put(
       // Convert string amenities to ObjectIds if present
       const processedData = {
         ...data,
-        ...(data.amenities && {
-          amenities: data.amenities.map(
-            (id) => new (require("mongodb").ObjectId)(id),
+        ...(data.amenitiesId && {
+          amenitiesId: data.amenitiesId.map((id) =>
+            typeof id === "string" ? new ObjectId(id) : id,
           ),
         }),
       };

@@ -20,6 +20,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import SearchFilters from "@/components/listing/SearchFilters";
+import { ROUTES } from "@/constants/routes";
 import type { ListingSearchParams } from "@/lib/api/listings/calls";
 import { getListingsOptions } from "@/lib/api/listings/options";
 
@@ -291,7 +292,7 @@ export default function ListingsPage() {
                 </Button>
                 <Button
                   component="a"
-                  href="/listings/new"
+                  href={ROUTES.LISTINGS_NEW}
                   leftSection={<Icon icon="mdi:plus" width={16} />}
                 >
                   List Your Space

@@ -1,32 +1,31 @@
-import type { z } from "zod/v4";
-import type { Booking } from "@/server/models/Booking";
 import type {
-  schemaCreateBooking,
-  schemaUpdateBooking,
-} from "@/server/validation/bookings";
+  ClientBooking,
+  CreateBookingData,
+  UpdateBookingData,
+} from "@/types";
 import api from "../client";
 
-export type CreateBookingData = z.infer<typeof schemaCreateBooking>;
-export type UpdateBookingData = z.infer<typeof schemaUpdateBooking>;
+// Re-export types for convenience
+export type { ClientBooking, CreateBookingData, UpdateBookingData };
 
 // Get user's bookings as renter
 export async function getBookings() {
-  return api.get("bookings").json<{ data: Booking[] }>();
+  return api.get("bookings").json<{ data: ClientBooking[] }>();
 }
 
 // Get booking requests for user's listings (as tenant)
 export async function getBookingRequests() {
-  return api.get("bookings/requests").json<{ data: Booking[] }>();
+  return api.get("bookings/requests").json<{ data: ClientBooking[] }>();
 }
 
 // Get a single booking by ID
 export async function getBookingById(id: string) {
-  return api.get(`bookings/${id}`).json<{ data: Booking }>();
+  return api.get(`bookings/${id}`).json<{ data: ClientBooking }>();
 }
 
 // Create a new booking
 export async function createBooking(data: CreateBookingData) {
-  return api.post("bookings", { json: data }).json<{ data: Booking }>();
+  return api.post("bookings", { json: data }).json<{ data: ClientBooking }>();
 }
 
 // Update a booking (approve/reject/cancel)
@@ -37,7 +36,9 @@ export async function updateBooking({
   id: string;
   data: UpdateBookingData;
 }) {
-  return api.put(`bookings/${id}`, { json: data }).json<{ data: Booking }>();
+  return api
+    .put(`bookings/${id}`, { json: data })
+    .json<{ data: ClientBooking }>();
 }
 
 // Delete a booking

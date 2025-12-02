@@ -11,7 +11,9 @@ export const metadata: Metadata = {
   description: "Sign in to your Xtended Space account",
 };
 
-export default async function LoginPage(props: PageProps<"/auth/for/[mode]">) {
+export default async function LoginPage(props: {
+  params: Promise<{ mode: string }>;
+}) {
   const { mode } = await props.params;
   const out = checkParamsAndRedirect(mode, authModeSchema, ROUTES.AUTHSIGN_UP);
   const isLogin = out === "login";

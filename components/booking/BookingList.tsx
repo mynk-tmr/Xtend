@@ -3,10 +3,10 @@
 import { Icon } from "@iconify/react";
 import { Badge, Card, Text, Title } from "@mantine/core";
 import { motion } from "motion/react";
-import type { Booking } from "@/server/models/Booking";
+import type { ClientBooking } from "@/types";
 
 interface BookingListProps {
-  bookings: Booking[];
+  bookings: ClientBooking[];
   title: string;
   emptyMessage: string;
 }
@@ -79,7 +79,9 @@ export default function BookingList({
 
                 <div className="mt-2">
                   <Text size="sm" c="dimmed" className="line-clamp-2">
-                    {booking.message}
+                    {booking.totalAmount
+                      ? `Total: $${booking.totalAmount}`
+                      : ""}
                   </Text>
                 </div>
               </Card>

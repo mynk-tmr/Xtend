@@ -3,13 +3,12 @@
 import { Icon } from "@iconify/react";
 import { Badge, Card, Text, Title } from "@mantine/core";
 import { motion } from "motion/react";
-import type { Booking } from "@/server/models/Booking";
-import type { StorageListing } from "@/server/models/Listing";
+import type { ClientBooking, ClientListing } from "@/types";
 
 interface RecentActivityProps {
-  listings: StorageListing[];
-  bookings: Booking[];
-  bookingRequests: Booking[];
+  listings: ClientListing[];
+  bookings: ClientBooking[];
+  bookingRequests: ClientBooking[];
 }
 
 export default function RecentActivity({
@@ -142,7 +141,7 @@ export default function RecentActivity({
                         New Booking Request
                       </Text>
                       <Text size="xs" c="dimmed">
-                        From: {booking.createdAt?.toLocaleDateString()}
+                        From: {new Date(booking.createdAt).toLocaleDateString()}
                       </Text>
                     </div>
                   </div>

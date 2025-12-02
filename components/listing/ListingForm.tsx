@@ -1,6 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import {
   Alert,
@@ -18,13 +17,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import type { z } from "zod/v4";
 import { getAmenitiesOptions } from "@/lib/api/amenities/options";
 import { getCreateListingOptions } from "@/lib/api/listings/options";
-import type { StorageTypeSchemaTypes } from "@/server/validation/+others";
-import { schemaCreateListing } from "@/server/validation/listings";
+import type { CreateListingData } from "@/types";
+import type { StorageTypeSchemaTypes } from "@/types/shared/validation";
 
-type CreateListingFormData = z.infer<typeof schemaCreateListing>;
+type CreateListingFormData = CreateListingData;
 
 interface ListingFormProps {
   onSuccess?: () => void;
@@ -210,7 +208,6 @@ export default function ListingForm({ onSuccess, onCancel }: ListingFormProps) {
     control,
     trigger,
   } = useForm<CreateListingFormData>({
-    resolver: zodResolver(schemaCreateListing) as any,
     defaultValues: {
       price: {
         value: 0,

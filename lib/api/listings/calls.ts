@@ -1,21 +1,18 @@
-import type { z } from "zod/v4";
-import type { StorageListing } from "@/server/models/Listing";
-// Import validation schemas to reuse types
 import type {
-  schemaCreateListing,
-  schemaSearchParams,
-} from "@/server/validation/listings";
+  ClientListing,
+  CreateListingData,
+  ListingSearchParams,
+  UpdateListingData,
+} from "@/types";
 import api from "../client";
 
-export type ListingSearchParams = z.infer<typeof schemaSearchParams>;
-
-export type CreateListingData = Omit<
-  z.infer<typeof schemaCreateListing>,
-  "amenities"
-> & {
-  amenities: string[];
+// Re-export types for convenience
+export type {
+  ClientListing,
+  CreateListingData,
+  UpdateListingData,
+  ListingSearchParams,
 };
-export type UpdateListingData = Partial<CreateListingData>;
 
 // Get all listings with optional search and filters
 export async function getListings(params?: ListingSearchParams) {
@@ -37,12 +34,12 @@ export async function getListings(params?: ListingSearchParams) {
     .get("listings", {
       searchParams,
     })
-    .json<{ data: StorageListing[] }>();
+    .json<{ data: ClientListing[] }>();
 }
 
 // Get a single listing by ID
 export async function getListingById(id: string) {
-  return api.get(`listings/${id}`).json<{ data: StorageListing }>();
+  return api.get(`listings/${id}`).json<{ data: ClientListing }>();
 }
 
 // Create a new listing
@@ -51,7 +48,7 @@ export async function createListing(data: CreateListingData) {
     .post("listings", {
       json: data,
     })
-    .json<{ data: StorageListing }>();
+    .json<{ data: ClientListing }>();
 }
 
 // Update a listing
@@ -63,7 +60,7 @@ export async function updateListing(input: {
     .put(`listings/${input.id}`, {
       json: input.data,
     })
-    .json<{ data: StorageListing }>();
+    .json<{ data: ClientListing }>();
 }
 
 // Delete a listing
@@ -73,7 +70,7 @@ export async function deleteListing(id: string) {
 
 // Get current user's listings
 export async function getUserListings() {
-  return api.get("listings/user/listings").json<{ data: StorageListing[] }>();
+  return api.get("listings/user/listings").json<{ data: ClientListing[] }>();
 }
 
 // Toggle listing availability
@@ -85,5 +82,5 @@ export async function toggleListingAvailability(input: {
     .put(`listings/${input.id}`, {
       json: { isAvailable: input.isAvailable },
     })
-    .json<{ data: StorageListing }>();
+    .json<{ data: ClientListing }>();
 }

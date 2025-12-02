@@ -10,7 +10,7 @@ import { complaintsRouter } from "@/server/routes/complaints";
 import { listingsRouter } from "@/server/routes/listings";
 import { shortlistsRouter } from "@/server/routes/shortlists";
 
-const app = new Hono();
+const app = new Hono().basePath("api");
 
 // Middleware
 app.use("*", logger());

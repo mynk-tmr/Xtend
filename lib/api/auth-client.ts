@@ -8,4 +8,5 @@ export const authClient = createAuthClient({
   fetchOptions: {
     throw: true,
   },
+  basePath: "/api",
 });

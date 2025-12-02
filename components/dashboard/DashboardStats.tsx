@@ -2,13 +2,12 @@
 
 import { Badge, Card, Text, Title } from "@mantine/core";
 import { motion } from "motion/react";
-import type { Booking } from "@/server/models/Booking";
-import type { StorageListing } from "@/server/models/Listing";
+import type { ClientBooking, ClientListing } from "@/types";
 
 interface DashboardStatsProps {
-  listings: StorageListing[];
-  bookings: Booking[];
-  bookingRequests: Booking[];
+  listings: ClientListing[];
+  bookings: ClientBooking[];
+  bookingRequests: ClientBooking[];
 }
 
 export default function DashboardStats({

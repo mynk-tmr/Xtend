@@ -14,17 +14,11 @@ export const signupSchema = z
     path: ["confirmPassword"],
   });
 
-export const loginSchema = signupSchema
-  .pick({
-    email: true,
-    password: true,
-    rememberMe: true,
-  })
-  .extend({
-    confirmPassword: z.undefined(),
-    firstName: z.undefined(),
-    lastName: z.undefined(),
-  });
+export const loginSchema = z.object({
+  email: z.email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  rememberMe: z.boolean(),
+});
 
 export const forgotPasswordSchema = z.object({
   email: z.email("Invalid email address"),

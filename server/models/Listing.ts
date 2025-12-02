@@ -42,14 +42,14 @@ export const StorageListingSchema = z
     createdAt: z.date().default(new Date()),
     updatedAt: z.date().default(new Date()),
   })
-  .extend(SelfStorageUnitDetailsSchema.partial())
-  .extend(WarehouseUnitDetailsSchema.partial())
-  .extend(CommercialUnitDetailsSchema.partial())
-  .extend(VehicleUnitDetailsSchema.partial())
-  .extend(SpecializedUnitDetailsSchema.partial())
-  .extend(WorkshopUnitDetailsSchema.partial())
-  .extend(CoworkingUnitDetailsSchema.partial())
-  .extend(AgriculturalUnitDetailsSchema.partial());
+  .extend(SelfStorageUnitDetailsSchema.partial().shape)
+  .extend(WarehouseUnitDetailsSchema.partial().shape)
+  .extend(CommercialUnitDetailsSchema.partial().shape)
+  .extend(VehicleUnitDetailsSchema.partial().shape)
+  .extend(SpecializedUnitDetailsSchema.partial().shape)
+  .extend(WorkshopUnitDetailsSchema.partial().shape)
+  .extend(CoworkingUnitDetailsSchema.partial().shape)
+  .extend(AgriculturalUnitDetailsSchema.partial().shape);
 
 // TypeScript type derived from schema
 export type StorageListing = z.output<typeof StorageListingSchema>;

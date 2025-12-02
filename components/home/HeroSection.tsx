@@ -6,7 +6,7 @@ import { Button, NumberInput, Select, TextInput } from "@mantine/core";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
-import type { PropertyTypeSchemaTypes } from "@/server/validation/+others";
+import type { PropertyTypeSchemaTypes } from "@/types/shared/validation";
 
 /* -----------------------------
    Constants

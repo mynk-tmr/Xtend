@@ -65,21 +65,21 @@ export const AmenityCategorySchema = z.enum([
 
 // Self Storage Unit Details Schema
 export const SelfStorageUnitDetailsSchema = z.object({
-  unitNumber: z.string(),
-  floorLevel: z.number().int().positive(),
-  unitSize: z.enum(["small", "medium", "large", "extra_large"]),
-  individualAlarm: z.boolean(),
+  unitNumber: z.string().optional(),
+  floorLevel: z.number().int().positive().optional(),
+  unitSize: z.enum(["small", "medium", "large", "extra_large"]).optional(),
+  individualAlarm: z.boolean().optional(),
 });
 
 // Warehouse Unit Details Schema
 export const WarehouseUnitDetailsSchema = z.object({
-  warehouseSize: z.enum(["small", "medium", "large"]),
-  dockDoors: z.number().int().nonnegative(),
-  officeSpace: z.number().nonnegative(),
-  ceilingHeight: z.number().positive(),
-  sprinklerSystem: z.boolean(),
-  forkliftAvailable: z.boolean(),
-  truckAccess: z.boolean(),
+  warehouseSize: z.enum(["small", "medium", "large"]).optional(),
+  dockDoors: z.number().int().nonnegative().optional(),
+  officeSpace: z.number().nonnegative().optional(),
+  ceilingHeight: z.number().positive().optional(),
+  sprinklerSystem: z.boolean().optional(),
+  forkliftAvailable: z.boolean().optional(),
+  truckAccess: z.boolean().optional(),
 });
 
 // Commercial Unit Details Schema

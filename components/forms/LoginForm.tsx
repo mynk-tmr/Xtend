@@ -41,7 +41,7 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
 
   const onSubmit = async (values: LoginFormData | SignupFormData) => {
     try {
-      if (values.firstName === undefined) {
+      if (isLogin) {
         await authClient.signIn.email({
           email: values.email,
           password: values.password,
@@ -51,9 +51,9 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
         await authClient.signUp.email({
           email: values.email,
           password: values.password,
-          name: `${values.firstName} ${values.lastName}`,
-          firstName: values.firstName,
-          lastName: values.lastName,
+          name: `${(values as SignupFormData).firstName} ${(values as SignupFormData).lastName}`,
+          firstName: (values as SignupFormData).firstName,
+          lastName: (values as SignupFormData).lastName,
         });
       }
 
@@ -102,7 +102,7 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
                   placeholder="John"
                   required
                   {...register("firstName")}
-                  error={errors.firstName?.message}
+                  error={(errors as any).firstName?.message}
                 />
               </div>
               <div>
@@ -111,7 +111,7 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
                   placeholder="Doe"
                   required
                   {...register("lastName")}
-                  error={errors.lastName?.message}
+                  error={(errors as any).lastName?.message}
                 />
               </div>
             </div>
@@ -141,7 +141,7 @@ export default function AuthForm({ isLogin }: AuthFormProps) {
               placeholder="Confirm your password"
               required
               leftSection={<Icon icon="heroicons:lock-closed" width={16} />}
-              error={errors.confirmPassword?.message}
+              error={(errors as any).confirmPassword?.message}
               {...register("confirmPassword")}
             />
           )}

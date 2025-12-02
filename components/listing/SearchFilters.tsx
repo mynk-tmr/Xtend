@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import type { ListingSearchParams } from "@/lib/api/listings/calls";
-import type { StorageTypeSchemaTypes } from "@/server/validation/+others";
+import type { StorageTypeSchemaTypes } from "@/types/shared/validation";
 
 interface SearchFiltersProps {
   onFiltersChange: (filters: ListingSearchParams) => void;
@@ -26,16 +26,16 @@ export default function SearchFilters({
 }: SearchFiltersProps) {
   const MIN_INTEGER = 0;
   const MAX_INTEGER = 10_000;
-  const defaultFilters: ListingSearchParams = {
-    storageType: undefined,
+  const defaultFilters = {
+    storageType: null as string | null,
     areaRange: { min: MIN_INTEGER, max: MAX_INTEGER },
     priceRange: { min: MIN_INTEGER, max: MAX_INTEGER },
     climateControlled: false,
     temperatureControlled: false,
     city: "",
     state: "",
-    businessType: [],
-    vehicleType: [],
+    businessType: [] as string[],
+    vehicleType: [] as string[],
   };
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -73,7 +73,7 @@ export default function SearchFilters({
   ) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
-    onFiltersChange(newFilters);
+    onFiltersChange(newFilters as ListingSearchParams);
   };
 
   const handleReset = () => {
@@ -100,12 +100,7 @@ export default function SearchFilters({
                 placeholder="Select storage type"
                 data={storageTypes}
                 value={filters.storageType}
-                onChange={(value) =>
-                  handleFilterChange(
-                    "storageType",
-                    value as ListingSearchParams["storageType"],
-                  )
-                }
+                onChange={(value) => handleFilterChange("storageType", value)}
                 clearable
               />
 
@@ -117,7 +112,7 @@ export default function SearchFilters({
                   onChange={(value) =>
                     handleFilterChange("areaRange", {
                       ...filters.areaRange,
-                      min: Number(value) || 0,
+                      min: Number(value),
                     })
                   }
                 />
@@ -203,12 +198,7 @@ export default function SearchFilters({
                 placeholder="Select business type"
                 data={businessTypes}
                 value={filters.businessType}
-                onChange={(value) =>
-                  handleFilterChange(
-                    "businessType",
-                    value as ListingSearchParams["businessType"],
-                  )
-                }
+                onChange={(value) => handleFilterChange("businessType", value)}
                 clearable
                 multiple
               />
@@ -218,12 +208,7 @@ export default function SearchFilters({
                 placeholder="Select vehicle type"
                 data={vehicleTypes}
                 value={filters.vehicleType}
-                onChange={(value) =>
-                  handleFilterChange(
-                    "vehicleType",
-                    value as ListingSearchParams["vehicleType"],
-                  )
-                }
+                onChange={(value) => handleFilterChange("vehicleType", value)}
                 clearable
                 multiple
               />
@@ -276,7 +261,7 @@ export default function SearchFilters({
           Reset Filters
         </Button>
         <Button
-          onClick={() => onFiltersChange(filters)}
+          onClick={() => onFiltersChange(filters as ListingSearchParams)}
           leftSection={<Icon icon="mdi:magnify" width={16} />}
         >
           Apply Filters

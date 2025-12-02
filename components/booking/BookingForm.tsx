@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import { Alert, Button, Group, Textarea, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -8,11 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import type { z } from "zod/v4";
 import { getCreateBookingOptions } from "@/lib/api/bookings/options";
-import { schemaCreateBooking } from "@/server/validation/bookings";
-
-type CreateBookingFormData = z.infer<typeof schemaCreateBooking>;
+import type { CreateBookingData } from "@/types";
 
 interface BookingFormProps {
   listingId?: string;
@@ -36,15 +33,14 @@ export default function BookingForm({
     setError,
     formState: { errors, isSubmitting },
     control,
-  } = useForm<CreateBookingFormData>({
-    resolver: zodResolver(schemaCreateBooking),
+  } = useForm<CreateBookingData>({
     defaultValues: {
       listingId: listingId || "",
       message: "",
     },
   });
 
-  const onSubmit = async (values: CreateBookingFormData) => {
+  const onSubmit = async (values: CreateBookingData) => {
     try {
       await createBookingMutation.mutateAsync(values);
 
@@ -88,7 +84,6 @@ export default function BookingForm({
             placeholder="Listing ID will be auto-filled"
             {...control.register("listingId")}
             error={errors.listingId?.message}
-            disabled
           />
 
           <Textarea

@@ -1,6 +1,7 @@
 import type { Route } from "next";
 
 export const ROUTES = {
+  AUTH: "/auth" as Route,
   AUTHLOGIN: "/auth/for/login" as Route,
   AUTHSIGN_UP: "/auth/for/sign-up" as Route,
   PASSWORDFORGOT: "/auth/password/forgot" as Route,
